@@ -12,6 +12,7 @@ into a stream of tokens. It handles:
 
 from typing import List, Optional
 from src.lexer.token import Token, TokenType, create_token, keyword_type
+from src.utils.error import LexerError
 
 
 class Lexer:
@@ -367,10 +368,15 @@ class Lexer:
 
     def _error(self, message: str):
         """
-        Report a lexical error.
-        For now, just print. Later we'll use proper error handling.
+        Report a lexical error by raising LexerError exception.
+
+        Args:
+            message: Error message
+
+        Raises:
+            LexerError: Always raised with position information
         """
-        print(f"Lexer Error at line {self.line}, column {self.column}: {message}")
+        raise LexerError(message, self.line, self.column)
 
 
 # Convenience function

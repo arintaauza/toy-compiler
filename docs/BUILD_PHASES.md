@@ -26,39 +26,39 @@ Week 8: Polish         → Production-ready compiler
 ### Tasks
 
 #### 1.1: Token Definition
-- [ ] Create `src/lexer/token.py`
-- [ ] Define `TokenType` enum (all token types)
-- [ ] Create `Token` class (type, value, position)
-- [ ] Add position tracking (line, column)
+- [x] Create `src/lexer/token.py`
+- [x] Define `TokenType` enum (all token types)
+- [x] Create `Token` class (type, value, position)
+- [x] Add position tracking (line, column)
 
 #### 1.2: Lexer Implementation
-- [ ] Create `src/lexer/lexer.py`
-- [ ] Implement character stream reader
-- [ ] Add whitespace skipping
-- [ ] Implement comment handling (// and /*)
-- [ ] Add keyword recognition
-- [ ] Implement identifier scanning
-- [ ] Add number literal scanning (int and float)
-- [ ] Implement string literal scanning (with escapes)
-- [ ] Add operator recognition
-- [ ] Implement punctuation scanning
+- [x] Create `src/lexer/lexer.py`
+- [x] Implement character stream reader
+- [x] Add whitespace skipping
+- [x] Implement comment handling (// and /*)
+- [x] Add keyword recognition
+- [x] Implement identifier scanning
+- [x] Add number literal scanning (int and float)
+- [x] Implement string literal scanning (with escapes)
+- [x] Add operator recognition
+- [x] Implement punctuation scanning
 
 #### 1.3: Error Handling
-- [ ] Create `src/utils/error.py`
-- [ ] Add `LexerError` exception
-- [ ] Implement error reporting with position
-- [ ] Add helpful error messages
+- [x] Create `src/utils/error.py`
+- [x] Add `LexerError` exception
+- [x] Implement error reporting with position
+- [x] Add helpful error messages
 
 #### 1.4: Testing
-- [ ] Write `tests/test_lexer.py`
-- [ ] Test keyword recognition
-- [ ] Test identifier scanning
-- [ ] Test number literals
-- [ ] Test string literals with escapes
-- [ ] Test operators and punctuation
-- [ ] Test comment handling
-- [ ] Test error cases
-- [ ] Aim for 100% coverage
+- [x] Write `tests/test_lexer.py`
+- [x] Test keyword recognition
+- [x] Test identifier scanning
+- [x] Test number literals
+- [x] Test string literals with escapes
+- [x] Test operators and punctuation
+- [x] Test comment handling
+- [x] Test error cases
+- [x] Aim for 100% coverage (achieved 90%)
 
 ### Example Test
 

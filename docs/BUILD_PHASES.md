@@ -4,15 +4,17 @@ This document provides a step-by-step guide to building the Luna compiler from s
 
 ## Overview
 
-We'll build the compiler in **6 phases** over approximately **6 weeks**. Each phase builds on the previous one, allowing you to test incrementally.
+We'll build the compiler in **8 phases** over approximately **8-10 weeks**. Each phase builds on the previous one, allowing you to test incrementally.
 
 ```
-Week 1: Lexer      → Tokens
-Week 2: Parser     → AST
-Week 3: Semantic   → Type-checked AST
-Week 4: IR         → Three-Address Code
-Week 5: Codegen    → Executable
-Week 6: Polish     → Production-ready
+Week 1: Lexer          → Tokens
+Week 2: Parser         → AST
+Week 3: Semantic       → Type-checked AST
+Week 4: IR             → Three-Address Code (TAC)
+Week 5: Optimizations  → Optimized IR (DCE, CSE, Constant Folding)
+Week 6: Assembly       → x86-64 or ARM assembly
+Week 7: LLVM           → LLVM IR generation (optional)
+Week 8: Polish         → Production-ready compiler
 ```
 
 ---
@@ -303,10 +305,12 @@ def test_type_mismatch():
   - [ ] Return statements
 - [ ] Generate IR for functions
 
-#### 4.4: IR Optimization (Optional)
-- [ ] Constant folding (2 + 3 → 5)
-- [ ] Dead code elimination
-- [ ] Copy propagation
+#### 4.4: Control Flow Graph (CFG)
+- [ ] Create `src/ir/cfg.py`
+- [ ] Build CFG from TAC (basic blocks + edges)
+- [ ] Implement basic block creation
+- [ ] Add predecessor/successor tracking
+- [ ] Create CFG visualizer (for debugging)
 
 #### 4.5: IR Printing
 - [ ] Add `__str__()` for TAC instructions
@@ -343,18 +347,317 @@ x = t1
 
 ---
 
-## Phase 5: Code Generation (Week 5)
+## Phase 5: IR Optimizations (Week 5)
 
-**Goal:** Generate executable code from IR
+**Goal:** Implement classic compiler optimizations on TAC
 
-**Choose ONE target:**
-- Option A: Tree-walking interpreter (simplest)
-- Option B: Python code generator (medium)
-- Option C: C code generator (harder, but learn more)
+### Overview
 
-### Option A: Tree-Walking Interpreter
+This phase implements the most important optimizations that make compiled code faster and smaller. Each optimization is a transformation pass over the IR.
 
-#### 5A.1: Interpreter Implementation
+### Tasks
+
+#### 5.1: Constant Folding
+
+Evaluate compile-time constant expressions.
+
+- [ ] Create `src/ir/optimizations/constant_folding.py`
+- [ ] Detect constant operands in binary operations
+- [ ] Evaluate arithmetic operations:
+  - [ ] `t1 = 2 + 3` → `t1 = 5`
+  - [ ] `t2 = 10 * 0` → `t2 = 0`
+- [ ] Evaluate comparison operations:
+  - [ ] `t3 = 5 > 3` → `t3 = true`
+- [ ] Evaluate logical operations:
+  - [ ] `t4 = true && false` → `t4 = false`
+- [ ] Handle unary operations:
+  - [ ] `t5 = -42` → `t5 = -42`
+  - [ ] `t6 = !true` → `t6 = false`
+- [ ] Add tests for all cases
+
+**Example:**
+```
+Before:
+    t0 = 2 + 3
+    t1 = t0 * 4
+    x = t1
+
+After:
+    t0 = 5
+    t1 = 20
+    x = 20
+```
+
+#### 5.2: Dead Code Elimination (DCE)
+
+Remove code that doesn't affect program output.
+
+- [ ] Create `src/ir/optimizations/dead_code_elimination.py`
+- [ ] Implement liveness analysis
+- [ ] Mark live variables (used in output/return/function calls)
+- [ ] Remove assignments to dead variables
+- [ ] Remove unreachable code after returns
+- [ ] Remove unreachable code after unconditional jumps
+- [ ] Add tests for various dead code patterns
+
+**Example:**
+```
+Before:
+    t0 = 5        // Dead: never used
+    x = 10
+    return x
+    y = 20        // Dead: unreachable
+
+After:
+    x = 10
+    return x
+```
+
+#### 5.3: Common Subexpression Elimination (CSE)
+
+Avoid recomputing the same expression.
+
+- [ ] Create `src/ir/optimizations/cse.py`
+- [ ] Build expression table (expression → temporary)
+- [ ] Detect duplicate expressions:
+  - [ ] Same operator
+  - [ ] Same operands
+  - [ ] No intervening modifications
+- [ ] Replace duplicate computation with temporary
+- [ ] Handle basic blocks (don't cross block boundaries initially)
+- [ ] Add tests
+
+**Example:**
+```
+Before:
+    t0 = a + b
+    x = t0
+    t1 = a + b    // Same as t0!
+    y = t1
+
+After:
+    t0 = a + b
+    x = t0
+    y = t0        // Reuse t0
+```
+
+#### 5.4: Copy Propagation
+
+Replace variable copies with original variables.
+
+- [ ] Create `src/ir/optimizations/copy_propagation.py`
+- [ ] Detect copy instructions: `x = y`
+- [ ] Replace uses of `x` with `y` (where valid)
+- [ ] Track variable modifications
+- [ ] Stop propagation when variable is reassigned
+- [ ] Add tests
+
+**Example:**
+```
+Before:
+    x = a
+    y = x + 1    // Use 'a' directly
+    z = x * 2    // Use 'a' directly
+
+After:
+    x = a
+    y = a + 1
+    z = a * 2
+```
+
+#### 5.5: Algebraic Simplification
+
+Apply mathematical identities.
+
+- [ ] Create `src/ir/optimizations/algebraic.py`
+- [ ] Implement identity simplifications:
+  - [ ] `x + 0` → `x`
+  - [ ] `x - 0` → `x`
+  - [ ] `x * 1` → `x`
+  - [ ] `x * 0` → `0`
+  - [ ] `x / 1` → `x`
+- [ ] Implement strength reduction:
+  - [ ] `x * 2` → `x + x`
+  - [ ] `x * 4` → `x << 2` (if targeting assembly)
+- [ ] Implement constant hoisting
+- [ ] Add tests
+
+#### 5.6: Control Flow Optimizations
+
+Simplify control flow structures.
+
+- [ ] Create `src/ir/optimizations/control_flow.py`
+- [ ] Branch elimination:
+  - [ ] `if true goto L1` → `goto L1`
+  - [ ] `if false goto L1` → remove instruction
+- [ ] Unreachable code after unconditional jumps
+- [ ] Merge basic blocks (when possible)
+- [ ] Remove empty blocks
+- [ ] Add tests
+
+#### 5.7: Optimization Pass Manager
+
+- [ ] Create `src/ir/optimizations/pass_manager.py`
+- [ ] Define optimization pass interface
+- [ ] Implement pass ordering (some passes enable others)
+- [ ] Run passes until fixed point:
+  - [ ] Run all passes
+  - [ ] If IR changed, repeat
+  - [ ] Stop when no more changes
+- [ ] Add pass statistics (how many optimizations applied)
+- [ ] Add `--optimize` flag to CLI
+
+#### 5.8: Testing
+
+- [ ] Write `tests/test_optimizations.py`
+- [ ] Test each optimization individually
+- [ ] Test pass interactions:
+  - [ ] Constant folding → DCE (folded constants make code dead)
+  - [ ] Copy propagation → CSE (more opportunities)
+- [ ] Test fixed-point iteration
+- [ ] Benchmark: measure speedup on example programs
+
+### Deliverables
+
+✅ 6 optimization passes implemented
+✅ Pass manager with fixed-point iteration
+✅ Tests for all optimizations
+✅ Can run: `python luna.py --optimize --ir examples/test.luna`
+✅ Measurable improvement on benchmarks
+
+---
+
+## Phase 6: Assembly Code Generation (Week 6-7)
+
+**Goal:** Generate native assembly code from optimized IR
+
+**Primary Target:** x86-64 assembly (AT&T or Intel syntax)
+**Alternative:** ARM64 assembly (if on Apple Silicon)
+
+### Overview
+
+This is the most educational backend - you'll learn how high-level code maps to actual machine instructions.
+
+### Tasks
+
+#### 6.1: Register Allocation
+
+- [ ] Create `src/codegen/register_allocator.py`
+- [ ] Implement linear scan register allocation
+- [ ] Available registers (x86-64):
+  - [ ] General purpose: rax, rbx, rcx, rdx, rsi, rdi, r8-r15
+  - [ ] Reserved: rbp (frame pointer), rsp (stack pointer)
+- [ ] Spill to stack when out of registers
+- [ ] Track register usage per basic block
+- [ ] Add tests
+
+#### 6.2: Stack Frame Layout
+
+- [ ] Design stack frame structure:
+  ```
+  +------------------+ <- rbp (frame pointer)
+  | Local variables  |
+  +------------------+
+  | Spilled temps    |
+  +------------------+
+  | Saved registers  |
+  +------------------+
+  | Return address   | <- pushed by call
+  +------------------+ <- rsp (stack pointer)
+  ```
+- [ ] Calculate offsets for locals
+- [ ] Calculate frame size
+
+#### 6.3: x86-64 Assembly Generator
+
+- [ ] Create `src/codegen/x86_64_codegen.py`
+- [ ] Generate function prologue:
+  ```asm
+  push rbp
+  mov rbp, rsp
+  sub rsp, <frame_size>
+  ```
+- [ ] Generate function epilogue:
+  ```asm
+  mov rsp, rbp
+  pop rbp
+  ret
+  ```
+- [ ] Generate code for TAC instructions:
+
+  **Arithmetic:**
+  - [ ] `x = y + z` → `mov rax, [y]; add rax, [z]; mov [x], rax`
+  - [ ] `x = y - z` → `mov rax, [y]; sub rax, [z]; mov [x], rax`
+  - [ ] `x = y * z` → `mov rax, [y]; imul rax, [z]; mov [x], rax`
+  - [ ] `x = y / z` → `mov rax, [y]; cqo; idiv [z]; mov [x], rax`
+
+  **Comparisons:**
+  - [ ] `x = y < z` → `mov rax, [y]; cmp rax, [z]; setl al; movzx rax, al; mov [x], rax`
+  - [ ] Similar for `>`, `<=`, `>=`, `==`, `!=`
+
+  **Control Flow:**
+  - [ ] `goto L` → `jmp L`
+  - [ ] `if x goto L` → `cmp [x], 0; jne L`
+  - [ ] `label L:` → `L:`
+
+  **Function Calls (System V ABI):**
+  - [ ] Arguments in registers: rdi, rsi, rdx, rcx, r8, r9
+  - [ ] Additional arguments on stack
+  - [ ] `call function_name`
+  - [ ] Return value in rax
+
+#### 6.4: Built-in Functions
+
+- [ ] Implement `print()` (call printf/puts)
+- [ ] Implement `input()` (call scanf)
+- [ ] Link with C standard library
+
+#### 6.5: Assembly File Generation
+
+- [ ] Create `src/codegen/asm_emitter.py`
+- [ ] Generate .s file with:
+  - [ ] `.section .text` (code section)
+  - [ ] `.section .data` (data section for strings)
+  - [ ] `.globl main` (export main)
+  - [ ] Proper labels and formatting
+- [ ] Add comments in generated assembly
+
+#### 6.6: Compilation & Linking
+
+- [ ] Create compilation script
+- [ ] Generate .s file from IR
+- [ ] Assemble with: `as -o program.o program.s`
+- [ ] Link with: `gcc -o program program.o` (links libc)
+- [ ] Execute: `./program`
+
+#### 6.7: Testing
+
+- [ ] Write `tests/test_codegen.py`
+- [ ] Test instruction generation
+- [ ] Test register allocation
+- [ ] Test full pipeline:
+  - [ ] Compile Luna → Assembly → Binary
+  - [ ] Run binary
+  - [ ] Verify output
+- [ ] Test all example programs
+
+### Deliverables
+
+✅ x86-64 assembly code generator
+✅ Register allocator
+✅ Can compile Luna to native executable
+✅ All example programs produce correct output
+✅ Can run: `python luna.py -o program examples/fibonacci.luna && ./program`
+
+---
+
+### Alternative: Interpreter (Simpler)
+
+If assembly is too challenging initially, implement a tree-walking interpreter:
+
+### Simple Tree-Walking Interpreter
+
+#### 6A.1: Interpreter Implementation (Alternative to Assembly)
 - [ ] Create `src/codegen/interpreter.py`
 - [ ] Implement environment (variable storage)
 - [ ] Add evaluation for expressions
@@ -362,105 +665,331 @@ x = t1
 - [ ] Implement function calls with stack
 - [ ] Add built-in functions (print, input, len)
 
-#### 5A.2: Runtime
+#### 6A.2: Runtime
 - [ ] Implement call stack
 - [ ] Add runtime type checking
 - [ ] Handle runtime errors (division by zero, etc.)
 
-#### 5A.3: Testing
+#### 6A.3: Testing
 - [ ] Test all language features
 - [ ] Test recursion
 - [ ] Test runtime errors
 
-### Option B: Python Code Generator
-
-#### 5B.1: Python Codegen
-- [ ] Create `src/codegen/python_codegen.py`
-- [ ] Generate Python code from AST or IR
-- [ ] Map Luna types to Python types
-- [ ] Generate function definitions
-- [ ] Generate control flow
-- [ ] Add main() wrapper
-
-#### 5B.2: Testing
-- [ ] Generate Python code
-- [ ] Execute with `python generated.py`
-- [ ] Verify output
-
-### Option C: C Code Generator
-
-#### 5C.1: C Codegen
-- [ ] Create `src/codegen/c_codegen.py`
-- [ ] Generate C code from IR
-- [ ] Add standard library stubs
-- [ ] Generate main() function
-- [ ] Handle type conversions
-
-#### 5C.2: Compilation
-- [ ] Generate .c file
-- [ ] Compile with gcc/clang
-- [ ] Execute binary
-
-### Deliverables
-
-✅ Working code generator
-✅ Can execute Luna programs
-✅ All example programs work
-✅ Can run: `python luna.py examples/hello.luna`
-
 ---
 
-## Phase 6: Polish & Optimization (Week 6)
+## Phase 7: LLVM IR Generation (Week 7-8, Optional)
 
-**Goal:** Make the compiler production-ready
+**Goal:** Generate LLVM IR for maximum performance and portability
+
+### Overview
+
+LLVM IR is a low-level intermediate representation used by the LLVM compiler infrastructure. By targeting LLVM IR, you get:
+- World-class optimizations (LLVM's optimization passes)
+- Multiple target architectures (x86, ARM, RISC-V, etc.)
+- Integration with existing toolchains
+- JIT compilation capabilities
+
+### Prerequisites
+
+- [ ] Install LLVM: `brew install llvm` (macOS) or `apt install llvm` (Linux)
+- [ ] Install Python bindings: `pip install llvmlite`
 
 ### Tasks
 
-#### 6.1: CLI Tool
-- [ ] Create `luna.py` main entry point
-- [ ] Add command-line argument parsing
-- [ ] Add options: --tokens, --ast, --ir, --output
-- [ ] Add version info, help text
+#### 7.1: LLVM IR Basics
 
-#### 6.2: Error Messages
-- [ ] Improve all error messages
-- [ ] Add color-coded output
-- [ ] Show source context for errors
-- [ ] Add suggestions for common mistakes
+Learn LLVM IR syntax and structure:
+- [ ] Study LLVM IR format (SSA form)
+- [ ] Understand LLVM types (i32, i64, float, etc.)
+- [ ] Learn LLVM instructions (add, sub, mul, load, store, etc.)
+- [ ] Understand function declarations and basic blocks
 
-#### 6.3: Optimizations
-- [ ] Constant folding
-- [ ] Dead code elimination
-- [ ] Strength reduction (x * 2 → x + x)
-- [ ] Common subexpression elimination
+**Example LLVM IR:**
+```llvm
+define i32 @add(i32 %a, i32 %b) {
+entry:
+  %result = add i32 %a, %b
+  ret i32 %result
+}
+```
 
-#### 6.4: Documentation
-- [ ] Complete all docs/
-- [ ] Add code comments
-- [ ] Write tutorial
-- [ ] Add more examples
+#### 7.2: LLVM IR Generator
 
-#### 6.5: Testing
-- [ ] Achieve >90% code coverage
-- [ ] Add integration tests
-- [ ] Test all example programs
-- [ ] Add benchmarks
+- [ ] Create `src/codegen/llvm_codegen.py`
+- [ ] Initialize LLVM module
+- [ ] Create LLVM builder
 
-#### 6.6: Examples
-- [ ] hello_world.luna
-- [ ] fibonacci.luna
-- [ ] factorial.luna
-- [ ] fizzbuzz.luna
-- [ ] calculator.luna
-- [ ] guess_game.luna
+#### 7.3: Type Mapping
+
+Map Luna types to LLVM types:
+- [ ] `int` → `i64` (64-bit integer)
+- [ ] `float` → `double` (64-bit float)
+- [ ] `bool` → `i1` (1-bit integer)
+- [ ] `string` → `i8*` (pointer to char array)
+- [ ] `void` → `void`
+
+#### 7.4: Function Generation
+
+- [ ] Create LLVM function signature from Luna function
+- [ ] Generate function parameters
+- [ ] Create entry basic block
+- [ ] Generate function body
+- [ ] Generate return instruction
+
+#### 7.5: Expression Codegen
+
+Generate LLVM IR for expressions:
+
+**Arithmetic:**
+- [ ] Addition: `builder.add(left, right)`
+- [ ] Subtraction: `builder.sub(left, right)`
+- [ ] Multiplication: `builder.mul(left, right)`
+- [ ] Division: `builder.sdiv(left, right)` (signed) or `builder.udiv()`
+- [ ] Modulo: `builder.srem(left, right)`
+
+**Comparisons:**
+- [ ] `<`: `builder.icmp_signed('<', left, right)`
+- [ ] `>`: `builder.icmp_signed('>', left, right)`
+- [ ] `==`: `builder.icmp_signed('==', left, right)`
+- [ ] `!=`: `builder.icmp_signed('!=', left, right)`
+
+**Logical:**
+- [ ] `&&`: `builder.and_(left, right)`
+- [ ] `||`: `builder.or_(left, right)`
+- [ ] `!`: `builder.not_(value)`
+
+#### 7.6: Statement Codegen
+
+**Variables:**
+- [ ] Allocate local variables: `builder.alloca(type)`
+- [ ] Store values: `builder.store(value, pointer)`
+- [ ] Load values: `builder.load(pointer)`
+
+**Control Flow:**
+- [ ] If statements:
+  ```python
+  then_block = function.append_basic_block('then')
+  else_block = function.append_basic_block('else')
+  merge_block = function.append_basic_block('merge')
+
+  builder.cbranch(condition, then_block, else_block)
+  # Generate then/else branches
+  builder.branch(merge_block)
+  ```
+
+- [ ] While loops:
+  ```python
+  loop_header = function.append_basic_block('loop_header')
+  loop_body = function.append_basic_block('loop_body')
+  loop_exit = function.append_basic_block('loop_exit')
+
+  builder.branch(loop_header)
+  # Generate condition check
+  builder.cbranch(condition, loop_body, loop_exit)
+  ```
+
+#### 7.7: Function Calls
+
+- [ ] Generate function call: `builder.call(function, args)`
+- [ ] Handle built-in functions:
+  - [ ] Declare external printf: `Function(...)`
+  - [ ] Create print() wrapper
+  - [ ] Create input() wrapper
+
+#### 7.8: Module Finalization
+
+- [ ] Verify LLVM module: `llvm.verify_module(module)`
+- [ ] Optimize module with LLVM passes:
+  - [ ] Function inlining
+  - [ ] Dead code elimination
+  - [ ] Constant propagation
+  - [ ] Instruction combining
+- [ ] Emit LLVM IR to file: `module.print_module()`
+
+#### 7.9: Compilation Pipeline
+
+Create complete LLVM compilation pipeline:
+
+**Option A: Generate LLVM IR file (.ll)**
+```bash
+python luna.py --llvm -o program.ll examples/fibonacci.luna
+lli program.ll  # Execute with LLVM interpreter
+```
+
+**Option B: Generate bitcode (.bc)**
+```bash
+python luna.py --llvm-bc -o program.bc examples/fibonacci.luna
+llc program.bc -o program.s  # Compile to assembly
+as program.s -o program.o
+gcc program.o -o program
+./program
+```
+
+**Option C: Optimize with LLVM**
+```bash
+python luna.py --llvm -o program.ll examples/fibonacci.luna
+opt -O3 program.ll -o program-opt.ll  # LLVM optimizations
+llc program-opt.ll -o program.s
+as program.s -o program.o
+gcc program.o -o program
+./program
+```
+
+#### 7.10: Testing
+
+- [ ] Write `tests/test_llvm_codegen.py`
+- [ ] Test type mapping
+- [ ] Test expression generation
+- [ ] Test control flow
+- [ ] Test function calls
+- [ ] Verify LLVM IR is valid
+- [ ] Compare output with interpreter/assembly backend
+- [ ] Benchmark: LLVM -O3 vs unoptimized
 
 ### Deliverables
 
-✅ Professional CLI tool
-✅ Excellent error messages
-✅ Comprehensive documentation
-✅ 90%+ test coverage
-✅ Multiple example programs
+✅ LLVM IR code generator
+✅ Can generate valid LLVM IR from Luna
+✅ Can compile via LLVM toolchain
+✅ Integration with LLVM optimizer
+✅ Can run: `python luna.py --llvm examples/fibonacci.luna | lli`
+
+### Resources
+
+- LLVM Language Reference: https://llvm.org/docs/LangRef.html
+- llvmlite Tutorial: https://llvmlite.readthedocs.io/
+- LLVM Kaleidoscope Tutorial: https://llvm.org/docs/tutorial/
+
+---
+
+## Phase 8: Polish & Production (Week 8-10)
+
+**Goal:** Make the compiler production-ready with excellent UX
+
+### Tasks
+
+#### 8.1: CLI Tool
+- [ ] Create `luna.py` main entry point
+- [ ] Add command-line argument parsing with argparse
+- [ ] Add compilation options:
+  - [ ] `--tokens` (show tokenization)
+  - [ ] `--ast` (show AST)
+  - [ ] `--ir` (show unoptimized IR)
+  - [ ] `--ir-opt` (show optimized IR)
+  - [ ] `--asm` (show assembly)
+  - [ ] `--llvm` (generate LLVM IR)
+  - [ ] `--optimize` / `-O` (enable optimizations)
+  - [ ] `--output` / `-o` (output file)
+  - [ ] `--run` (compile and execute)
+  - [ ] `--verbose` / `-v` (debug output)
+- [ ] Add version info, help text
+- [ ] Add compilation statistics (time per phase)
+
+**Example Usage:**
+```bash
+luna examples/fibonacci.luna                    # Compile and run
+luna --optimize examples/fibonacci.luna         # With optimizations
+luna --asm -o fib.s examples/fibonacci.luna     # Generate assembly
+luna --llvm examples/fibonacci.luna | lli       # LLVM IR
+luna --ir --ir-opt examples/test.luna           # Compare IR before/after optimization
+```
+
+#### 8.2: Error Messages
+- [ ] Improve all error messages
+- [ ] Add color-coded output (red for errors, yellow for warnings)
+- [ ] Show source context for errors:
+  ```
+  Error: Type mismatch at line 5, column 18
+
+      let x: int = "hello";
+                   ^~~~~~~
+
+  Expected type 'int' but got 'string'
+  Help: You cannot assign a string value to an integer variable
+  ```
+- [ ] Add suggestions for common mistakes:
+  - [ ] Typo detection for identifiers
+  - [ ] Missing semicolons
+  - [ ] Unmatched braces
+  - [ ] Type conversion hints
+
+#### 8.3: Documentation
+- [ ] Complete all docs/
+- [ ] Add comprehensive code comments
+- [ ] Write TUTORIAL.md (step-by-step Luna programming guide)
+- [ ] Write COMPILER_INTERNALS.md (how the compiler works)
+- [ ] Add architecture diagrams
+- [ ] Document all CLI flags
+- [ ] Create Luna language reference card
+
+#### 8.4: Testing & Quality
+- [ ] Achieve >90% code coverage
+- [ ] Add integration tests (full pipeline)
+- [ ] Test all example programs
+- [ ] Add negative tests (programs that should fail)
+- [ ] Create test suite with diverse Luna programs
+- [ ] Add benchmarks:
+  - [ ] Compilation speed
+  - [ ] Generated code performance
+  - [ ] Optimization effectiveness
+
+#### 8.5: More Example Programs
+- [ ] hello_world.luna (basic I/O)
+- [ ] fibonacci.luna (recursion)
+- [ ] factorial.luna (recursion)
+- [ ] fizzbuzz.luna (conditionals)
+- [ ] calculator.luna (user input, operators)
+- [ ] guess_game.luna (while loops, random)
+- [ ] prime_checker.luna (modulo, functions)
+- [ ] array_sum.luna (when arrays are added)
+- [ ] string_reverse.luna (string manipulation)
+- [ ] tower_of_hanoi.luna (complex recursion)
+
+#### 8.6: Performance & Benchmarks
+
+Create benchmark suite:
+- [ ] Measure compilation time per phase
+- [ ] Compare interpreter vs assembly vs LLVM performance
+- [ ] Compare optimized vs unoptimized code
+- [ ] Create performance graphs
+- [ ] Document optimization impact
+
+**Example Benchmark:**
+```
+Program: fibonacci(35)
+
+Compilation Times:
+- Lexer:    2ms
+- Parser:   5ms
+- Semantic: 3ms
+- IR Gen:   4ms
+- Optimize: 8ms (5 passes)
+- Codegen:  12ms
+Total:      34ms
+
+Execution Times:
+- Interpreter:      8,500ms
+- Assembly (-O0):   2,100ms
+- Assembly (-O):      850ms
+- LLVM (-O0):       1,900ms
+- LLVM (-O3):        620ms
+
+Optimization Impact:
+- DCE removed: 23 dead instructions
+- CSE reduced: 15 duplicate expressions
+- Constant folding: 8 expressions evaluated
+Code size: 145 instructions → 87 instructions (40% reduction)
+```
+
+### Deliverables
+
+✅ Professional CLI tool with all flags
+✅ Excellent error messages with colors and context
+✅ Comprehensive documentation (tutorials, references, internals)
+✅ 90%+ test coverage with integration tests
+✅ 10+ example programs
+✅ Performance benchmarks and analysis
+✅ Production-ready compiler!
 
 ---
 
@@ -528,19 +1057,34 @@ git tag phase-1-complete
 
 ## Recommended Order
 
-**Absolute beginners:**
-1. Start with Phase 1 (Lexer)
-2. Build Phase 2 (Parser) for expressions only first
-3. Add statements to parser
-4. Do Phase 3 (Semantic) for basic type checking
-5. Choose Option A (Interpreter) for Phase 5
-6. Skip Phase 4 (IR) initially
+**Learning Path 1: Interpreter First (Beginner-Friendly)**
+1. Phase 1: Lexer
+2. Phase 2: Parser
+3. Phase 3: Semantic Analysis
+4. Phase 6 (Alternative): Tree-walking Interpreter
+5. Go back to Phase 4: IR Generation
+6. Phase 5: Optimizations
+7. Phase 6: Assembly or Phase 7: LLVM
 
-**Intermediate:**
-Follow all phases in order, choose Option B or C for codegen
+**Learning Path 2: Full Pipeline (Intermediate)**
+1. Phase 1: Lexer
+2. Phase 2: Parser
+3. Phase 3: Semantic Analysis
+4. Phase 4: IR Generation (no optimizations yet)
+5. Phase 6: Assembly Code Generation
+6. Go back to Phase 5: Add Optimizations
+7. Phase 7: LLVM (optional)
+8. Phase 8: Polish
 
-**Advanced:**
-Implement all options for Phase 5, add optimizations
+**Learning Path 3: Production Compiler (Advanced)**
+1. Phases 1-3: Frontend (lexer, parser, semantic)
+2. Phase 4: IR + CFG
+3. Phase 5: All optimizations with pass manager
+4. Phase 6: Assembly with register allocation
+5. Phase 7: LLVM IR generation
+6. Phase 8: CLI, benchmarks, extensive testing
+
+**Recommended**: Path 2 for best learning experience
 
 ---
 

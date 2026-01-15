@@ -1,0 +1,21 @@
+// Factorial calculator
+// Demonstrates recursion and conditionals
+
+fn factorial(n: int) -> int {
+    if n <= 1 {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+fn main() -> int {
+    let num: int = 5;
+    let result: int = factorial(num);
+
+    print("Factorial of");
+    print(num);
+    print("is");
+    print(result);  // Should print 120
+
+    return 0;
+}

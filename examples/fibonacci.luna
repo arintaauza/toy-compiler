@@ -1,0 +1,22 @@
+// Fibonacci sequence calculator
+// Demonstrates recursion and arithmetic
+
+fn fibonacci(n: int) -> int {
+    if n <= 1 {
+        return n;
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+fn main() -> int {
+    print("Fibonacci sequence (first 10 numbers):");
+
+    let i: int = 0;
+    while i < 10 {
+        let fib: int = fibonacci(i);
+        print(fib);
+        i = i + 1;
+    }
+
+    return 0;
+}

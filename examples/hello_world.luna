@@ -1,0 +1,7 @@
+// Hello World in Luna
+// The simplest Luna program
+
+fn main() -> int {
+    print("Hello, World!");
+    return 0;
+}

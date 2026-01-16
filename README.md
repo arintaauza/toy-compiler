@@ -10,20 +10,41 @@ A complete compiler for **Luna**, a statically-typed programming language, built
 - **6 optimization passes**: Constant folding, DCE, CSE, copy propagation, algebraic simplification, control flow
 - **390 tests** with comprehensive coverage
 
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/luna-compiler.git
+cd luna-compiler
+
+# Create virtual environment (recommended)
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install the compiler
+pip install -e .
+```
+
+After installation, the `luna` command is available:
+
+```bash
+luna examples/fibonacci.luna
+```
+
 ## Quick Start
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
-
 # Run a Luna program
-python luna.py examples/fibonacci.luna
+luna examples/fibonacci.luna
 
 # With optimizations
-python luna.py -O examples/fibonacci.luna
+luna -O examples/fibonacci.luna
 
 # Show generated LLVM IR
-python luna.py --llvm examples/fibonacci.luna
+luna --llvm examples/fibonacci.luna
+
+# Show x86-64 assembly
+luna --asm examples/factorial.luna
 ```
 
 ## Example Luna Program
@@ -62,7 +83,7 @@ fn main() -> int {
 ## CLI Usage
 
 ```bash
-python luna.py [options] <file.luna>
+luna [options] <file.luna>
 
 Options:
   --tokens      Show lexer output
@@ -76,13 +97,16 @@ Options:
   -v            Verbose mode (timing stats)
   --backend     Choose backend: x86 (default) or llvm
   --no-color    Disable colored output
+  --help        Show help message
+  --version     Show version
 ```
 
 ## Project Structure
 
 ```
-compiler_project/
+luna-compiler/
 ├── luna.py                 # CLI entry point
+├── pyproject.toml          # Package configuration
 ├── src/
 │   ├── lexer/              # Tokenization
 │   ├── parser/             # AST construction
@@ -125,13 +149,13 @@ Source (.luna)
 
 ```bash
 # Run all tests
-python -m pytest
+pytest
 
 # Run specific phase
-python -m pytest tests/test_semantic.py -v
+pytest tests/test_semantic.py -v
 
 # With coverage
-python -m pytest --cov=src
+pytest --cov=src
 ```
 
 Test breakdown:
@@ -151,11 +175,23 @@ Test breakdown:
 - [COMPILER_INTERNALS.md](docs/COMPILER_INTERNALS.md) - Type system, IR, optimizations
 - [BUILD_PHASES.md](docs/BUILD_PHASES.md) - Implementation roadmap
 
-## Dependencies
+## Requirements
 
 - Python 3.8+
-- pytest
-- llvmlite (for LLVM backend)
+- llvmlite (installed automatically)
+
+## Development
+
+```bash
+# Install with dev dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run specific example
+luna examples/prime_checker.luna
+```
 
 ## License
 

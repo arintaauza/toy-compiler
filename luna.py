@@ -176,7 +176,7 @@ def create_parser() -> argparse.ArgumentParser:
     info_group.add_argument(
         "--version",
         action="version",
-        version="Luna Compiler v0.1.0"
+        version="Luna Compiler v1.0.0"
     )
 
     return parser

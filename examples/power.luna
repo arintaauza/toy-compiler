@@ -1,0 +1,37 @@
+// Power function using fast exponentiation
+// Demonstrates efficient recursion
+
+fn power(base: int, exp: int) -> int {
+    if exp == 0 {
+        return 1;
+    }
+    if exp == 1 {
+        return base;
+    }
+
+    // Fast exponentiation: x^n = (x^(n/2))^2
+    let half: int = power(base, exp / 2);
+    if exp % 2 == 0 {
+        return half * half;
+    } else {
+        return base * half * half;
+    }
+}
+
+fn main() -> int {
+    print("Power calculations:");
+
+    // 2^10 = 1024
+    print("2^10 =");
+    print(power(2, 10));
+
+    // 3^5 = 243
+    print("3^5 =");
+    print(power(3, 5));
+
+    // 5^3 = 125
+    print("5^3 =");
+    print(power(5, 3));
+
+    return 0;
+}

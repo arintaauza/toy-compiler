@@ -1,7 +1,7 @@
 """
-SSA-based Intermediate Representation for the Luna compiler.
+SSA-based Intermediate Representation for the Toy compiler.
 
-This module defines the instruction set for Luna's IR in Static Single Assignment
+This module defines the instruction set for Toy's IR in Static Single Assignment
 (SSA) form. In SSA form:
 - Each variable is assigned exactly once
 - Variables are versioned (x_0, x_1, x_2, etc.)

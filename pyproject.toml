@@ -3,16 +3,16 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "luna-compiler"
+name = "toy-compiler"
 version = "1.0.0"
-description = "A statically-typed programming language compiler with x86-64 and LLVM backends"
+description = "A toy programming language compiler for learning compiler construction"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.8"
 authors = [
     {name = "Arinta"}
 ]
-keywords = ["compiler", "programming-language", "llvm", "x86-64"]
+keywords = ["compiler", "programming-language", "llvm", "x86-64", "educational", "toy-language"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -40,14 +40,14 @@ dev = [
 ]
 
 [project.scripts]
-luna = "luna:main"
+toy = "toy:main"
 
 [project.urls]
-Documentation = "https://github.com/arinta/luna-compiler#readme"
-Source = "https://github.com/arinta/luna-compiler"
+Documentation = "https://github.com/arinta/toy-compiler#readme"
+Source = "https://github.com/arinta/toy-compiler"
 
 [tool.setuptools]
-py-modules = ["luna"]
+py-modules = ["toy"]
 
 [tool.setuptools.packages.find]
 where = ["."]

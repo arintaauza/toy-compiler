@@ -1,6 +1,6 @@
-# Luna Compiler
+# Toy Compiler
 
-A complete compiler for **Luna**, a statically-typed programming language, built from scratch in Python.
+A complete compiler for **Toy**, a simple statically-typed programming language built for learning compiler construction.
 
 ## Features
 
@@ -14,8 +14,8 @@ A complete compiler for **Luna**, a statically-typed programming language, built
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/luna-compiler.git
-cd luna-compiler
+git clone https://github.com/your-username/toy-compiler.git
+cd toy-compiler
 
 # Create virtual environment (recommended)
 python3 -m venv venv
@@ -25,31 +25,31 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e .
 ```
 
-After installation, the `luna` command is available:
+After installation, the `toy` command is available:
 
 ```bash
-luna examples/fibonacci.luna
+toy examples/fibonacci.toy
 ```
 
 ## Quick Start
 
 ```bash
-# Run a Luna program
-luna examples/fibonacci.luna
+# Run a Toy program
+toy examples/fibonacci.toy
 
 # With optimizations
-luna -O examples/fibonacci.luna
+toy -O examples/fibonacci.toy
 
 # Show generated LLVM IR
-luna --llvm examples/fibonacci.luna
+toy --llvm examples/fibonacci.toy
 
 # Show x86-64 assembly
-luna --asm examples/factorial.luna
+toy --asm examples/factorial.toy
 ```
 
-## Example Luna Program
+## Example Toy Program
 
-```luna
+```toy
 fn fibonacci(n: int) -> int {
     if n <= 1 {
         return n;
@@ -83,7 +83,7 @@ fn main() -> int {
 ## CLI Usage
 
 ```bash
-luna [options] <file.luna>
+toy [options] <file.toy>
 
 Options:
   --tokens      Show lexer output
@@ -104,8 +104,8 @@ Options:
 ## Project Structure
 
 ```
-luna-compiler/
-├── luna.py                 # CLI entry point
+toy-compiler/
+├── toy.py                  # CLI entry point
 ├── pyproject.toml          # Package configuration
 ├── src/
 │   ├── lexer/              # Tokenization
@@ -123,7 +123,7 @@ luna-compiler/
 ## Compiler Pipeline
 
 ```
-Source (.luna)
+Source (.toy)
     |
     v
 [1] Lexer -----------> Tokens
@@ -170,7 +170,7 @@ Test breakdown:
 
 ## Documentation
 
-- [LANGUAGE_SPEC.md](docs/LANGUAGE_SPEC.md) - Luna language specification
+- [LANGUAGE_SPEC.md](docs/LANGUAGE_SPEC.md) - Toy language specification
 - [COMPILER_DESIGN.md](docs/COMPILER_DESIGN.md) - Architecture overview
 - [COMPILER_INTERNALS.md](docs/COMPILER_INTERNALS.md) - Type system, IR, optimizations
 - [BUILD_PHASES.md](docs/BUILD_PHASES.md) - Implementation roadmap
@@ -190,7 +190,7 @@ pip install -e ".[dev]"
 pytest
 
 # Run specific example
-luna examples/prime_checker.luna
+toy examples/prime_checker.toy
 ```
 
 ## License

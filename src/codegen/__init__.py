@@ -1,5 +1,5 @@
 """
-Code Generation module for the Luna compiler.
+Code Generation module for the Toy compiler.
 
 This module provides code generation from SSA-based IR to:
 - x86-64 assembly (direct generation)
@@ -15,7 +15,7 @@ Components:
 Usage (x86-64):
     from src.codegen import compile_and_run, compile_to_asm
 
-    # Compile and run Luna source code
+    # Compile and run Toy source code
     result = compile_and_run('''
         fn main() -> int {
             print(42);

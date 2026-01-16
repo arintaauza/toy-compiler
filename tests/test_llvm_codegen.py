@@ -37,7 +37,7 @@ def make_var(name: str, version: int, ir_type: IRType = IRType.INT) -> IRValue:
 # =============================================================================
 
 class TestTypeMapping:
-    """Tests for Luna type to LLVM type mapping."""
+    """Tests for Toy type to LLVM type mapping."""
 
     def test_int_type(self):
         """Test INT maps to i64."""
@@ -77,7 +77,7 @@ class TestTypeMapping:
 # =============================================================================
 
 class TestIRGeneration:
-    """Tests for LLVM IR generation from Luna IR."""
+    """Tests for LLVM IR generation from Toy IR."""
 
     def test_simple_function(self):
         """Test generating a simple function."""
@@ -327,7 +327,7 @@ class TestHighLevelAPI:
     """Tests for the high-level compilation API."""
 
     def test_compile_to_llvm_ir(self):
-        """Test compiling Luna source to LLVM IR."""
+        """Test compiling Toy source to LLVM IR."""
         source = """
         fn main() -> int {
             return 42;

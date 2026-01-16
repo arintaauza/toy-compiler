@@ -31,7 +31,7 @@ from src.ir.instructions import (
     IRFunction,
     IRModule,
 )
-from src.ir.ssa import SSANameGenerator, luna_type_to_ir_type
+from src.ir.ssa import SSANameGenerator, toy_type_to_ir_type
 from src.ir.cfg import CFG, CFGBuilder
 from src.ir.ir_generator import IRGenerator, generate_ir
 from src.ir.ir_printer import IRPrinter, format_ir

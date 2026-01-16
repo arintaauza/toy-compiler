@@ -1,8 +1,8 @@
 """
-Type system for the Luna compiler.
+Type system for the Toy compiler.
 
-This module defines the Luna type system including:
-- LunaType base class and concrete type classes
+This module defines the Toy type system including:
+- ToyType base class and concrete type classes
 - Type compatibility and equality checking
 - Built-in type instances (INT, FLOAT, BOOL, STRING, VOID)
 """
@@ -15,9 +15,9 @@ if TYPE_CHECKING:
     from src.parser.ast_nodes import TypeAnnotation
 
 
-class LunaType(ABC):
+class ToyType(ABC):
     """
-    Abstract base class for all Luna types.
+    Abstract base class for all Toy types.
 
     All types must implement equality checking and string representation.
     """
@@ -38,7 +38,7 @@ class LunaType(ABC):
         """Check if this type is numeric (int or float)."""
         return False
 
-    def is_compatible_with(self, other: 'LunaType') -> bool:
+    def is_compatible_with(self, other: 'ToyType') -> bool:
         """
         Check if this type is compatible with another type.
 
@@ -48,9 +48,9 @@ class LunaType(ABC):
         return self == other
 
 
-class PrimitiveType(LunaType):
+class PrimitiveType(ToyType):
     """
-    Represents a primitive (built-in) type in Luna.
+    Represents a primitive (built-in) type in Toy.
 
     Primitive types: int, float, bool, string, void
     """
@@ -81,15 +81,15 @@ class PrimitiveType(LunaType):
 
 
 @dataclass
-class FunctionType(LunaType):
+class FunctionType(ToyType):
     """
-    Represents a function type in Luna.
+    Represents a function type in Toy.
 
     Function types track parameter types and return type for
     type checking function calls.
     """
-    parameter_types: List[LunaType] = field(default_factory=list)
-    return_type: LunaType = None
+    parameter_types: List[ToyType] = field(default_factory=list)
+    return_type: ToyType = None
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FunctionType):
@@ -136,15 +136,15 @@ BUILTIN_TYPES = {
 # Type Conversion Utilities
 # =============================================================================
 
-def type_from_annotation(annotation: 'TypeAnnotation') -> LunaType:
+def type_from_annotation(annotation: 'TypeAnnotation') -> ToyType:
     """
-    Convert a TypeAnnotation (from AST) to a LunaType.
+    Convert a TypeAnnotation (from AST) to a ToyType.
 
     Args:
         annotation: TypeAnnotation enum value from the parser
 
     Returns:
-        Corresponding LunaType
+        Corresponding ToyType
 
     Raises:
         ValueError: If the annotation is unknown
@@ -165,15 +165,15 @@ def type_from_annotation(annotation: 'TypeAnnotation') -> LunaType:
     raise ValueError(f"Unknown type annotation: {annotation}")
 
 
-def type_from_name(name: str) -> Optional[LunaType]:
+def type_from_name(name: str) -> Optional[ToyType]:
     """
-    Get a LunaType by name.
+    Get a ToyType by name.
 
     Args:
         name: Type name (e.g., "int", "float")
 
     Returns:
-        Corresponding LunaType, or None if not found
+        Corresponding ToyType, or None if not found
     """
     return BUILTIN_TYPES.get(name.lower())
 
@@ -182,11 +182,11 @@ def type_from_name(name: str) -> Optional[LunaType]:
 # Type Checking Utilities
 # =============================================================================
 
-def is_assignable(target_type: LunaType, value_type: LunaType) -> bool:
+def is_assignable(target_type: ToyType, value_type: ToyType) -> bool:
     """
     Check if a value of value_type can be assigned to a variable of target_type.
 
-    Luna has strict typing - no implicit conversions are allowed.
+    Toy has strict typing - no implicit conversions are allowed.
 
     Args:
         target_type: The type of the variable being assigned to
@@ -200,9 +200,9 @@ def is_assignable(target_type: LunaType, value_type: LunaType) -> bool:
 
 def get_binary_result_type(
     op: str,
-    left_type: LunaType,
-    right_type: LunaType
-) -> Optional[LunaType]:
+    left_type: ToyType,
+    right_type: ToyType
+) -> Optional[ToyType]:
     """
     Determine the result type of a binary operation.
 
@@ -220,7 +220,7 @@ def get_binary_result_type(
             return INT
         if left_type == FLOAT and right_type == FLOAT:
             return FLOAT
-        # Allow int/float mixed for arithmetic? Luna spec says no implicit conversion
+        # Allow int/float mixed for arithmetic? Toy spec says no implicit conversion
         # So we require same types
         return None
 
@@ -258,7 +258,7 @@ def get_binary_result_type(
     return None
 
 
-def get_unary_result_type(op: str, operand_type: LunaType) -> Optional[LunaType]:
+def get_unary_result_type(op: str, operand_type: ToyType) -> Optional[ToyType]:
     """
     Determine the result type of a unary operation.
 
@@ -284,7 +284,7 @@ def get_unary_result_type(op: str, operand_type: LunaType) -> Optional[LunaType]
     return None
 
 
-def types_match(expected: LunaType, actual: LunaType) -> bool:
+def types_match(expected: ToyType, actual: ToyType) -> bool:
     """
     Check if two types match exactly.
 
@@ -298,7 +298,7 @@ def types_match(expected: LunaType, actual: LunaType) -> bool:
     return expected == actual
 
 
-def format_type_mismatch(expected: LunaType, actual: LunaType) -> str:
+def format_type_mismatch(expected: ToyType, actual: ToyType) -> str:
     """
     Format a type mismatch error message.
 

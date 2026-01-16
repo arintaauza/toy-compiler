@@ -1,5 +1,5 @@
 """
-Constant Folding Optimization Pass for the Luna compiler.
+Constant Folding Optimization Pass for the Toy compiler.
 
 Constant folding evaluates expressions with constant operands at compile time,
 replacing them with the computed result. This reduces runtime computation.

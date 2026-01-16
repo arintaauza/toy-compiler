@@ -1,5 +1,5 @@
 """
-Common Subexpression Elimination (CSE) Optimization Pass for the Luna compiler.
+Common Subexpression Elimination (CSE) Optimization Pass for the Toy compiler.
 
 CSE identifies expressions that compute the same value and replaces redundant
 computations with the previously computed result.

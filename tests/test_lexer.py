@@ -1,5 +1,5 @@
 """
-Unit tests for the Luna lexer.
+Unit tests for the Toy lexer.
 
 Tests all tokenization functionality including:
 - Keywords, identifiers, literals

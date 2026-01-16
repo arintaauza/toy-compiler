@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-Luna Compiler - Main CLI Entry Point
+Toy Compiler - Main CLI Entry Point
 
-The Luna programming language compiler with multiple backends:
+The Toy programming language compiler with multiple backends:
 - x86-64 assembly (native)
 - LLVM IR (optimized, multi-platform)
 
 Usage:
-    luna examples/fibonacci.luna              # Compile and run
-    luna --optimize examples/fibonacci.luna   # With optimizations
-    luna --asm -o fib.s examples/fibonacci.luna  # Generate assembly
-    luna --llvm examples/fibonacci.luna       # Generate LLVM IR
-    luna --ir examples/test.luna              # Show IR
+    toy examples/fibonacci.toy              # Compile and run
+    toy --optimize examples/fibonacci.toy   # With optimizations
+    toy --asm -o fib.s examples/fibonacci.toy  # Generate assembly
+    toy --llvm examples/fibonacci.toy       # Generate LLVM IR
+    toy --ir examples/test.toy              # Show IR
 
-For more information: luna --help
+For more information: toy --help
 """
 
 import argparse
@@ -80,22 +80,22 @@ class CompilationStats:
 
 
 def create_parser() -> argparse.ArgumentParser:
-    """Create the argument parser for the Luna compiler."""
+    """Create the argument parser for the Toy compiler."""
     parser = argparse.ArgumentParser(
-        prog="luna",
-        description="Luna Programming Language Compiler",
+        prog="toy",
+        description="Toy Programming Language Compiler",
         epilog="Examples:\n"
-               "  luna examples/fibonacci.luna              # Compile and run\n"
-               "  luna --optimize examples/fibonacci.luna   # With optimizations\n"
-               "  luna --asm -o fib.s examples/fibonacci.luna  # Generate assembly\n"
-               "  luna --llvm examples/fibonacci.luna       # Generate LLVM IR\n",
+               "  toy examples/fibonacci.toy              # Compile and run\n"
+               "  toy --optimize examples/fibonacci.toy   # With optimizations\n"
+               "  toy --asm -o fib.s examples/fibonacci.toy  # Generate assembly\n"
+               "  toy --llvm examples/fibonacci.toy       # Generate LLVM IR\n",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
     parser.add_argument(
         "source",
         nargs="?",
-        help="Luna source file to compile"
+        help="Toy source file to compile"
     )
 
     # Output options
@@ -176,7 +176,7 @@ def create_parser() -> argparse.ArgumentParser:
     info_group.add_argument(
         "--version",
         action="version",
-        version="Luna Compiler v1.0.0"
+        version="Toy Compiler v1.0.0"
     )
 
     return parser
@@ -389,7 +389,7 @@ def run_program(args, source: str, stats: CompilationStats) -> int:
 
 
 def main():
-    """Main entry point for the Luna compiler."""
+    """Main entry point for the Toy compiler."""
     parser = create_parser()
     args = parser.parse_args()
 
@@ -408,8 +408,8 @@ def main():
         print_error(f"File not found: {args.source}")
         return 1
 
-    if not source_path.suffix == ".luna":
-        print(f"{Colors.YELLOW}Warning: File does not have .luna extension{Colors.RESET}")
+    if not source_path.suffix == ".toy":
+        print(f"{Colors.YELLOW}Warning: File does not have .toy extension{Colors.RESET}")
 
     try:
         source = source_path.read_text()

@@ -1,5 +1,5 @@
 """
-Recursive descent parser for the Luna compiler.
+Recursive descent parser for the Toy compiler.
 
 The parser consumes tokens from the lexer and builds an Abstract Syntax Tree (AST).
 It implements a recursive descent parser with precedence climbing for expressions.
@@ -63,7 +63,7 @@ from src.utils.error import ParserError
 
 class Parser:
     """
-    Recursive descent parser for Luna.
+    Recursive descent parser for Toy.
 
     Converts a stream of tokens into an Abstract Syntax Tree (AST).
     """
@@ -822,10 +822,10 @@ def parse(tokens: List[Token]) -> Program:
 
 def parse_source(source: str) -> Program:
     """
-    Lex and parse Luna source code into an AST.
+    Lex and parse Toy source code into an AST.
 
     Args:
-        source: Luna source code as a string
+        source: Toy source code as a string
 
     Returns:
         Program AST node

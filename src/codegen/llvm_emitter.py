@@ -1,13 +1,13 @@
 """
-LLVM Emitter for the Luna compiler.
+LLVM Emitter for the Toy compiler.
 
-High-level API for compiling Luna source code to LLVM IR and executing it.
+High-level API for compiling Toy source code to LLVM IR and executing it.
 
 Features:
-- Compile Luna source to LLVM IR text
+- Compile Toy source to LLVM IR text
 - JIT compilation and execution via MCJIT
 - Object file generation for native binaries
-- Integration with Luna's optimization passes
+- Integration with Toy's optimization passes
 """
 
 from typing import Optional, Any
@@ -33,11 +33,11 @@ class LLVMCompileResult:
 
 def compile_to_llvm_ir(source: str, optimize: bool = True) -> str:
     """
-    Compile Luna source code to LLVM IR text.
+    Compile Toy source code to LLVM IR text.
 
     Args:
-        source: Luna source code
-        optimize: Whether to run Luna optimization passes first
+        source: Toy source code
+        optimize: Whether to run Toy optimization passes first
 
     Returns:
         LLVM IR as a string
@@ -48,7 +48,7 @@ def compile_to_llvm_ir(source: str, optimize: bool = True) -> str:
     # Generate IR from source (includes lexing, parsing, semantic analysis)
     ir_module = generate_ir_from_source(source)
 
-    # Optimization (Luna-level)
+    # Optimization (Toy-level)
     if optimize:
         pass_manager = create_default_pass_manager()
         pass_manager.run_until_fixed_point(ir_module)
@@ -61,10 +61,10 @@ def compile_to_llvm_ir(source: str, optimize: bool = True) -> str:
 
 def compile_and_run_llvm(source: str, optimize: bool = True) -> LLVMCompileResult:
     """
-    Compile Luna source and execute using LLVM JIT.
+    Compile Toy source and execute using LLVM JIT.
 
     Args:
-        source: Luna source code
+        source: Toy source code
         optimize: Whether to run optimization passes
 
     Returns:
@@ -119,10 +119,10 @@ def compile_and_run_llvm(source: str, optimize: bool = True) -> LLVMCompileResul
 
 def compile_to_object(source: str, output_path: str, optimize: bool = True) -> bool:
     """
-    Compile Luna source to a native object file.
+    Compile Toy source to a native object file.
 
     Args:
-        source: Luna source code
+        source: Toy source code
         output_path: Path for the output .o file
         optimize: Whether to run optimization passes
 
@@ -204,10 +204,10 @@ def optimize_llvm_ir(llvm_ir_str: str, level: int = 2) -> str:
 
 def print_llvm_ir(source: str, optimize: bool = False) -> None:
     """
-    Print LLVM IR for Luna source code.
+    Print LLVM IR for Toy source code.
 
     Args:
-        source: Luna source code
+        source: Toy source code
         optimize: Whether to run optimization passes
     """
     llvm_ir = compile_to_llvm_ir(source, optimize)
@@ -288,10 +288,10 @@ class LLVMJITEngine:
 
     def compile_and_call_main(self, source: str, optimize: bool = True) -> int:
         """
-        Compile Luna source and call main().
+        Compile Toy source and call main().
 
         Args:
-            source: Luna source code
+            source: Toy source code
             optimize: Whether to optimize
 
         Returns:

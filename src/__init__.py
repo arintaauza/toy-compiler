@@ -1,7 +1,7 @@
 """
-Luna Compiler - Source Package
+Toy Compiler - Source Package
 
-A complete compiler for the Luna programming language with:
+A complete compiler for the Toy programming language with:
 - Lexical analysis (lexer)
 - Syntax analysis (parser)
 - Semantic analysis (semantic)

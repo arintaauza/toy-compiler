@@ -1,5 +1,5 @@
 """
-SSA (Static Single Assignment) variable management for the Luna compiler.
+SSA (Static Single Assignment) variable management for the Toy compiler.
 
 This module provides utilities for managing SSA variable versioning:
 - Variable versioning (x_0, x_1, x_2, ...)
@@ -255,12 +255,12 @@ class SSAContext:
         return self.block_var_versions.get(block_label, {})
 
 
-def luna_type_to_ir_type(luna_type_name: str) -> IRType:
+def toy_type_to_ir_type(toy_type_name: str) -> IRType:
     """
-    Convert Luna type name to IR type.
+    Convert Toy type name to IR type.
 
     Args:
-        luna_type_name: Luna type as string ("int", "float", etc.)
+        toy_type_name: Toy type as string ("int", "float", etc.)
 
     Returns:
         Corresponding IRType
@@ -281,7 +281,7 @@ def luna_type_to_ir_type(luna_type_name: str) -> IRType:
         "VOID": IRType.VOID,
     }
 
-    if luna_type_name in type_map:
-        return type_map[luna_type_name]
+    if toy_type_name in type_map:
+        return type_map[toy_type_name]
 
-    raise ValueError(f"Unknown Luna type: {luna_type_name}")
+    raise ValueError(f"Unknown Toy type: {toy_type_name}")

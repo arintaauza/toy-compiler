@@ -1,5 +1,5 @@
 """
-Intermediate Representation (IR) module for the Luna compiler.
+Intermediate Representation (IR) module for the Toy compiler.
 
 This module provides SSA-based three-address code (TAC) generation:
 - instructions.py: IR instruction definitions
@@ -49,7 +49,7 @@ from src.ir.instructions import (
 from src.ir.ssa import (
     SSANameGenerator,
     SSAContext,
-    luna_type_to_ir_type,
+    toy_type_to_ir_type,
 )
 
 from src.ir.cfg import (
@@ -100,7 +100,7 @@ __all__ = [
     # SSA
     "SSANameGenerator",
     "SSAContext",
-    "luna_type_to_ir_type",
+    "toy_type_to_ir_type",
 
     # CFG
     "CFG",

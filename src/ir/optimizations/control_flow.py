@@ -1,5 +1,5 @@
 """
-Control Flow Optimization Pass for the Luna compiler.
+Control Flow Optimization Pass for the Toy compiler.
 
 This pass performs several control flow optimizations:
 

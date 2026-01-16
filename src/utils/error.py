@@ -1,5 +1,5 @@
 """
-Error handling for the Luna compiler.
+Error handling for the Toy compiler.
 
 Defines custom exception classes for different compiler phases
 and provides utilities for error reporting.

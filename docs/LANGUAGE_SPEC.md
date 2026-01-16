@@ -1,11 +1,11 @@
-# Luna Language Specification
+# Toy Language Specification
 
 **Version:** 1.0
 **Status:** Draft
 
 ## Overview
 
-Luna is a statically-typed, imperative programming language with C-like syntax. It's designed to be simple enough to implement in a compiler course while being expressive enough to write interesting programs.
+Toy is a statically-typed, imperative programming language with C-like syntax. It's designed to be simple enough to implement in a compiler course while being expressive enough to write interesting programs.
 
 ## Lexical Structure
 
@@ -60,7 +60,7 @@ false
 #### String Literals
 ```
 "Hello, World!"
-"Luna is awesome"
+"Toy is awesome"
 ""  // empty string
 "Line 1\nLine 2"  // with escape sequences
 ```
@@ -74,13 +74,13 @@ false
 ### Comments
 
 #### Single-line Comments
-```luna
+```toy
 // This is a single-line comment
 let x: int = 42;  // Comments can appear after code
 ```
 
 #### Multi-line Comments
-```luna
+```toy
 /*
 This is a
 multi-line comment
@@ -162,7 +162,7 @@ multi-line comment
 
 Implicit conversions are **NOT** allowed. All type conversions must be explicit.
 
-```luna
+```toy
 let x: int = 42;
 let y: float = float(x);  // Explicit conversion (future feature)
 ```
@@ -173,7 +173,7 @@ let y: float = float(x);  // Explicit conversion (future feature)
 
 Variables must be declared with their type before use.
 
-```luna
+```toy
 let x: int;           // Declaration (initialized to 0)
 let y: int = 42;      // Declaration with initialization
 let name: string = "Alice";
@@ -183,7 +183,7 @@ let name: string = "Alice";
 
 Constants are immutable and must be initialized at declaration.
 
-```luna
+```toy
 const PI: float = 3.14159;
 const MAX_SIZE: int = 100;
 ```
@@ -194,7 +194,7 @@ const MAX_SIZE: int = 100;
 - Function scope: Function parameters are visible within the function body
 - Global scope: Variables declared outside functions are global
 
-```luna
+```toy
 let global: int = 10;  // Global variable
 
 fn example() -> void {
@@ -224,7 +224,7 @@ fn example() -> void {
 
 ### Arithmetic Expressions
 
-```luna
+```toy
 let a: int = 10 + 5 * 2;        // 20 (multiplication first)
 let b: int = (10 + 5) * 2;      // 30 (parentheses override)
 let c: float = 10.0 / 3.0;      // 3.333...
@@ -233,7 +233,7 @@ let d: int = 17 % 5;            // 2 (modulo)
 
 ### Boolean Expressions
 
-```luna
+```toy
 let x: bool = true && false;      // false
 let y: bool = true || false;      // true
 let z: bool = !true;              // false
@@ -242,7 +242,7 @@ let w: bool = (5 > 3) && (2 < 4); // true
 
 ### Comparison Expressions
 
-```luna
+```toy
 let a: bool = 10 == 10;  // true
 let b: bool = 5 != 3;    // true
 let c: bool = 7 < 10;    // true
@@ -255,7 +255,7 @@ let d: bool = 5 >= 5;    // true
 
 Any expression followed by a semicolon.
 
-```luna
+```toy
 x = 42;
 print("Hello");
 fibonacci(10);
@@ -263,14 +263,14 @@ fibonacci(10);
 
 ### Variable Declaration Statement
 
-```luna
+```toy
 let x: int = 10;
 const MAX: int = 100;
 ```
 
 ### Assignment Statement
 
-```luna
+```toy
 x = 42;
 y = x + 10;
 ```
@@ -279,7 +279,7 @@ y = x + 10;
 
 Group of statements enclosed in braces.
 
-```luna
+```toy
 {
     let x: int = 10;
     print(x);
@@ -289,7 +289,7 @@ Group of statements enclosed in braces.
 
 ### If Statement
 
-```luna
+```toy
 if condition {
     // statements
 }
@@ -311,7 +311,7 @@ if condition1 {
 
 ### While Loop
 
-```luna
+```toy
 while condition {
     // statements
 }
@@ -326,7 +326,7 @@ while i <= 10 {
 
 ### Return Statement
 
-```luna
+```toy
 return;           // Return from void function
 return 42;        // Return value from function
 return x + y;     // Return expression result
@@ -334,7 +334,7 @@ return x + y;     // Return expression result
 
 ### Break Statement (future)
 
-```luna
+```toy
 while true {
     if condition {
         break;  // Exit loop
@@ -344,7 +344,7 @@ while true {
 
 ### Continue Statement (future)
 
-```luna
+```toy
 while i < 10 {
     i = i + 1;
     if i % 2 == 0 {
@@ -358,7 +358,7 @@ while i < 10 {
 
 ### Function Declaration
 
-```luna
+```toy
 fn functionName(param1: type1, param2: type2) -> returnType {
     // statements
     return value;
@@ -367,7 +367,7 @@ fn functionName(param1: type1, param2: type2) -> returnType {
 
 ### Examples
 
-```luna
+```toy
 // Function with no parameters, returns int
 fn getFortyTwo() -> int {
     return 42;
@@ -392,7 +392,7 @@ fn main() -> int {
 
 ### Function Calls
 
-```luna
+```toy
 let result: int = add(10, 20);
 greet("Alice");
 let value: int = getFortyTwo();
@@ -400,9 +400,9 @@ let value: int = getFortyTwo();
 
 ### Recursion
 
-Luna supports recursive function calls.
+Toy supports recursive function calls.
 
-```luna
+```toy
 fn factorial(n: int) -> int {
     if n <= 1 {
         return 1;
@@ -417,7 +417,7 @@ fn factorial(n: int) -> int {
 
 Prints a value to stdout followed by a newline.
 
-```luna
+```toy
 print("Hello, World!");
 print(42);
 print(true);
@@ -427,7 +427,7 @@ print(true);
 
 Reads a line of input from stdin.
 
-```luna
+```toy
 let name: string = input("Enter your name: ");
 print("Hello, " + name);
 ```
@@ -436,7 +436,7 @@ print("Hello, " + name);
 
 Returns the length of a string.
 
-```luna
+```toy
 let text: string = "Hello";
 let length: int = len(text);  // 5
 ```
@@ -445,18 +445,18 @@ let length: int = len(text);  // 5
 
 ### Program Structure
 
-A Luna program consists of:
+A Toy program consists of:
 1. Optional global variable declarations
 2. One or more function definitions
 3. A `main()` function as the entry point
 
-```luna
+```toy
 // Global constants
 const VERSION: string = "1.0";
 
 // Helper function
 fn greet() -> void {
-    print("Luna Compiler v" + VERSION);
+    print("Toy Compiler v" + VERSION);
 }
 
 // Entry point
@@ -469,7 +469,7 @@ fn main() -> int {
 
 ### Entry Point
 
-Every Luna program must have a `main()` function:
+Every Toy program must have a `main()` function:
 - Must return `int` (exit code)
 - Can have no parameters
 - Return value of 0 indicates success
@@ -479,7 +479,7 @@ Every Luna program must have a `main()` function:
 
 ### Hello World
 
-```luna
+```toy
 fn main() -> int {
     print("Hello, World!");
     return 0;
@@ -488,7 +488,7 @@ fn main() -> int {
 
 ### Factorial Calculator
 
-```luna
+```toy
 fn factorial(n: int) -> int {
     if n <= 1 {
         return 1;
@@ -506,7 +506,7 @@ fn main() -> int {
 
 ### FizzBuzz
 
-```luna
+```toy
 fn main() -> int {
     let i: int = 1;
     while i <= 100 {

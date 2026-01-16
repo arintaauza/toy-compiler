@@ -1,5 +1,5 @@
 """
-IR Generator for the Luna compiler.
+IR Generator for the Toy compiler.
 
 This module translates the typed AST into SSA-form IR.
 It uses the visitor pattern to traverse the AST and emit
@@ -64,11 +64,11 @@ from src.ir.instructions import (
     IRModule,
     make_constant,
 )
-from src.ir.ssa import SSANameGenerator, luna_type_to_ir_type
+from src.ir.ssa import SSANameGenerator, toy_type_to_ir_type
 from src.ir.cfg import CFG, CFGBuilder
 
 
-# Mapping from Luna operators to IR opcodes
+# Mapping from Toy operators to IR opcodes
 BINARY_OP_MAP = {
     "+": OpCode.ADD,
     "-": OpCode.SUB,
@@ -808,10 +808,10 @@ def generate_ir(program: Program) -> IRModule:
 
 def generate_ir_from_source(source: str) -> IRModule:
     """
-    Lex, parse, analyze, and generate IR from Luna source code.
+    Lex, parse, analyze, and generate IR from Toy source code.
 
     Args:
-        source: Luna source code as a string
+        source: Toy source code as a string
 
     Returns:
         IRModule containing the generated IR

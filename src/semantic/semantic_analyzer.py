@@ -1,5 +1,5 @@
 """
-Semantic analyzer for the Luna compiler.
+Semantic analyzer for the Toy compiler.
 
 The semantic analyzer is the main entry point for semantic analysis.
 It orchestrates:
@@ -21,7 +21,7 @@ from src.parser.ast_nodes import (
     Statement,
 )
 from src.semantic.types import (
-    LunaType,
+    ToyType,
     FunctionType,
     INT, FLOAT, BOOL, STRING, VOID,
     type_from_annotation,
@@ -38,7 +38,7 @@ from src.utils.error import SemanticError
 
 class SemanticAnalyzer:
     """
-    Performs complete semantic analysis on a Luna program.
+    Performs complete semantic analysis on a Toy program.
 
     The analyzer runs multiple passes:
     1. Declaration pass: Build symbol table with all global declarations
@@ -299,10 +299,10 @@ def analyze(program: Program) -> SymbolTable:
 
 def analyze_source(source: str) -> SymbolTable:
     """
-    Lex, parse, and analyze Luna source code.
+    Lex, parse, and analyze Toy source code.
 
     Args:
-        source: Luna source code as a string
+        source: Toy source code as a string
 
     Returns:
         The symbol table with all declarations

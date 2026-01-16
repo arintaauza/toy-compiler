@@ -1,5 +1,5 @@
 """
-Lexer for the Luna compiler.
+Lexer for the Toy compiler.
 
 The lexer (also called scanner or tokenizer) converts source code text
 into a stream of tokens. It handles:
@@ -17,7 +17,7 @@ from src.utils.error import LexerError
 
 class Lexer:
     """
-    Lexical analyzer for Luna source code.
+    Lexical analyzer for Toy source code.
 
     Scans source code character by character and produces tokens.
     Tracks line and column positions for error reporting.
@@ -28,7 +28,7 @@ class Lexer:
         Initialize the lexer with source code.
 
         Args:
-            source: The Luna source code as a string
+            source: The Toy source code as a string
         """
         self.source = source
         self.start = 0      # Start of current token
@@ -382,10 +382,10 @@ class Lexer:
 # Convenience function
 def tokenize(source: str) -> List[Token]:
     """
-    Tokenize Luna source code.
+    Tokenize Toy source code.
 
     Args:
-        source: Luna source code as a string
+        source: Toy source code as a string
 
     Returns:
         List of tokens

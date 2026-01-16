@@ -343,7 +343,7 @@ class TestCompilationPipeline:
     """Tests for the full compilation pipeline."""
 
     def test_compile_source_to_asm(self):
-        """Test compiling Luna source to assembly."""
+        """Test compiling Toy source to assembly."""
         source = """
         fn main() -> int {
             return 42;

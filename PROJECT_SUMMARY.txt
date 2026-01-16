@@ -11,7 +11,7 @@ Tests: 390 passing
 WHAT IS LUNA?
 ================================================================================
 
-Luna is a statically-typed, C-like programming language with:
+Toy is a statically-typed, C-like programming language with:
 
 - Static typing: int, float, bool, string, void
 - Variables: let x: int = 42;
@@ -22,7 +22,7 @@ Luna is a statically-typed, C-like programming language with:
 - Comments: // single-line, /* multi-line */
 
 Example:
-```luna
+```toy
 fn fibonacci(n: int) -> int {
     if n <= 1 { return n; }
     return fibonacci(n - 1) + fibonacci(n - 2);
@@ -38,7 +38,7 @@ fn main() -> int {
 COMPILER ARCHITECTURE
 ================================================================================
 
-Source Code (.luna)
+Source Code (.toy)
        |
        v
 [Phase 1] Lexer -----------------> Tokens
@@ -59,19 +59,19 @@ Source Code (.luna)
        |
        +---> [Phase 7] LLVM Codegen -----> LLVM IR ---> Native Binary
 
-[Phase 8] CLI Tool (luna.py) - Professional command-line interface
+[Phase 8] CLI Tool (toy.py) - Professional command-line interface
 
 ================================================================================
 PROJECT STRUCTURE
 ================================================================================
 
 compiler_project/
-├── luna.py                    # CLI tool - main entry point
+├── toy.py                    # CLI tool - main entry point
 ├── README.md                  # Project overview
 ├── requirements.txt           # Python dependencies (pytest, llvmlite)
 │
 ├── docs/
-│   ├── LANGUAGE_SPEC.md       # Luna language specification
+│   ├── LANGUAGE_SPEC.md       # Toy language specification
 │   ├── COMPILER_DESIGN.md     # Architecture overview
 │   ├── COMPILER_INTERNALS.md  # Type system, IR, optimizations
 │   └── BUILD_PHASES.md        # Implementation roadmap (completed)
@@ -86,7 +86,7 @@ compiler_project/
 │   │   └── parser.py          # Recursive descent parser
 │   │
 │   ├── semantic/
-│   │   ├── types.py           # Type system (LunaType, PrimitiveType)
+│   │   ├── types.py           # Type system (ToyType, PrimitiveType)
 │   │   ├── symbol_table.py    # Symbol table with scope chain
 │   │   ├── type_checker.py    # Type validation
 │   │   └── semantic_analyzer.py  # Main semantic analysis
@@ -127,43 +127,43 @@ compiler_project/
 │   └── test_integration.py    # 39 tests
 │
 └── examples/
-    ├── hello_world.luna       # Basic I/O
-    ├── fibonacci.luna         # Recursion
-    ├── factorial.luna         # Recursion
-    ├── fizzbuzz.luna          # Conditionals
-    ├── prime_checker.luna     # Prime detection
-    ├── gcd.luna               # GCD/LCM algorithms
-    ├── power.luna             # Fast exponentiation
-    ├── sum_of_digits.luna     # Digit manipulation
-    ├── collatz.luna           # Collatz conjecture
-    └── triangle.luna          # Triangle numbers
+    ├── hello_world.toy       # Basic I/O
+    ├── fibonacci.toy         # Recursion
+    ├── factorial.toy         # Recursion
+    ├── fizzbuzz.toy          # Conditionals
+    ├── prime_checker.toy     # Prime detection
+    ├── gcd.toy               # GCD/LCM algorithms
+    ├── power.toy             # Fast exponentiation
+    ├── sum_of_digits.toy     # Digit manipulation
+    ├── collatz.toy           # Collatz conjecture
+    └── triangle.toy          # Triangle numbers
 
 ================================================================================
 USAGE
 ================================================================================
 
-# Compile and run a Luna program
-python luna.py examples/fibonacci.luna
+# Compile and run a Toy program
+python toy.py examples/fibonacci.toy
 
 # With optimizations
-python luna.py -O examples/fibonacci.luna
+python toy.py -O examples/fibonacci.toy
 
 # Show compilation stages
-python luna.py --tokens examples/hello_world.luna    # Show tokens
-python luna.py --ast examples/hello_world.luna       # Show AST
-python luna.py --ir examples/hello_world.luna        # Show IR
-python luna.py --ir-opt examples/hello_world.luna    # Show optimized IR
-python luna.py --asm examples/hello_world.luna       # Show x86-64 assembly
-python luna.py --llvm examples/hello_world.luna      # Show LLVM IR
+python toy.py --tokens examples/hello_world.toy    # Show tokens
+python toy.py --ast examples/hello_world.toy       # Show AST
+python toy.py --ir examples/hello_world.toy        # Show IR
+python toy.py --ir-opt examples/hello_world.toy    # Show optimized IR
+python toy.py --asm examples/hello_world.toy       # Show x86-64 assembly
+python toy.py --llvm examples/hello_world.toy      # Show LLVM IR
 
 # Generate output file
-python luna.py -o output.s --asm examples/fibonacci.luna
+python toy.py -o output.s --asm examples/fibonacci.toy
 
 # Verbose mode (shows timing stats)
-python luna.py -v examples/fibonacci.luna
+python toy.py -v examples/fibonacci.toy
 
 # Use LLVM backend
-python luna.py --backend llvm examples/fibonacci.luna
+python toy.py --backend llvm examples/fibonacci.toy
 
 ================================================================================
 TEST RESULTS

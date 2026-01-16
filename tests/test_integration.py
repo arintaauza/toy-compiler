@@ -1,5 +1,5 @@
 """
-Integration tests for the Luna compiler.
+Integration tests for the Toy compiler.
 
 Tests the complete compilation pipeline from source to execution,
 including all example programs and both backends.
@@ -25,8 +25,8 @@ class TestExamplePrograms:
     """Test that all example programs compile and run correctly."""
 
     def test_hello_world(self):
-        """Test hello_world.luna example."""
-        source = (EXAMPLES_DIR / "hello_world.luna").read_text()
+        """Test hello_world.toy example."""
+        source = (EXAMPLES_DIR / "hello_world.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -34,8 +34,8 @@ class TestExamplePrograms:
         assert result.return_code == 0
 
     def test_fibonacci(self):
-        """Test fibonacci.luna example."""
-        source = (EXAMPLES_DIR / "fibonacci.luna").read_text()
+        """Test fibonacci.toy example."""
+        source = (EXAMPLES_DIR / "fibonacci.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -46,8 +46,8 @@ class TestExamplePrograms:
         assert "34" in result.stdout
 
     def test_factorial(self):
-        """Test factorial.luna example."""
-        source = (EXAMPLES_DIR / "factorial.luna").read_text()
+        """Test factorial.toy example."""
+        source = (EXAMPLES_DIR / "factorial.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -55,8 +55,8 @@ class TestExamplePrograms:
         assert "120" in result.stdout  # 5! = 120
 
     def test_fizzbuzz(self):
-        """Test fizzbuzz.luna example."""
-        source = (EXAMPLES_DIR / "fizzbuzz.luna").read_text()
+        """Test fizzbuzz.toy example."""
+        source = (EXAMPLES_DIR / "fizzbuzz.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -66,8 +66,8 @@ class TestExamplePrograms:
         assert "Buzz" in result.stdout
 
     def test_prime_checker(self):
-        """Test prime_checker.luna example."""
-        source = (EXAMPLES_DIR / "prime_checker.luna").read_text()
+        """Test prime_checker.toy example."""
+        source = (EXAMPLES_DIR / "prime_checker.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -78,8 +78,8 @@ class TestExamplePrograms:
         assert "47" in result.stdout
 
     def test_gcd(self):
-        """Test gcd.luna example."""
-        source = (EXAMPLES_DIR / "gcd.luna").read_text()
+        """Test gcd.toy example."""
+        source = (EXAMPLES_DIR / "gcd.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -88,8 +88,8 @@ class TestExamplePrograms:
         assert "144" in result.stdout  # LCM of 48 and 18
 
     def test_power(self):
-        """Test power.luna example."""
-        source = (EXAMPLES_DIR / "power.luna").read_text()
+        """Test power.toy example."""
+        source = (EXAMPLES_DIR / "power.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -99,8 +99,8 @@ class TestExamplePrograms:
         assert "125" in result.stdout   # 5^3
 
     def test_sum_of_digits(self):
-        """Test sum_of_digits.luna example."""
-        source = (EXAMPLES_DIR / "sum_of_digits.luna").read_text()
+        """Test sum_of_digits.toy example."""
+        source = (EXAMPLES_DIR / "sum_of_digits.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -109,16 +109,16 @@ class TestExamplePrograms:
         assert "5" in result.stdout   # 5 digits
 
     def test_collatz(self):
-        """Test collatz.luna example."""
-        source = (EXAMPLES_DIR / "collatz.luna").read_text()
+        """Test collatz.toy example."""
+        source = (EXAMPLES_DIR / "collatz.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
         assert result.return_code == 0
 
     def test_triangle(self):
-        """Test triangle.luna example."""
-        source = (EXAMPLES_DIR / "triangle.luna").read_text()
+        """Test triangle.toy example."""
+        source = (EXAMPLES_DIR / "triangle.toy").read_text()
         result = compile_and_run(source)
 
         assert result.success
@@ -137,8 +137,8 @@ class TestLLVMBackend:
     """Test examples with LLVM backend."""
 
     def test_hello_world_llvm(self):
-        """Test hello_world.luna with LLVM backend."""
-        source = (EXAMPLES_DIR / "hello_world.luna").read_text()
+        """Test hello_world.toy with LLVM backend."""
+        source = (EXAMPLES_DIR / "hello_world.toy").read_text()
         result = compile_and_run_llvm(source)
 
         assert result.success
@@ -339,37 +339,37 @@ class TestOptimizations:
 # =============================================================================
 
 class TestCLI:
-    """Test the luna.py CLI tool."""
+    """Test the toy.py CLI tool."""
 
     @pytest.fixture
-    def luna_py(self):
-        """Path to luna.py."""
-        return Path(__file__).parent.parent / "luna.py"
+    def toy_py(self):
+        """Path to toy.py."""
+        return Path(__file__).parent.parent / "toy.py"
 
-    def test_cli_help(self, luna_py):
+    def test_cli_help(self, toy_py):
         """Test --help option."""
         result = subprocess.run(
-            [sys.executable, str(luna_py), "--help"],
+            [sys.executable, str(toy_py), "--help"],
             capture_output=True,
             text=True
         )
         assert result.returncode == 0
-        assert "Luna Programming Language Compiler" in result.stdout
+        assert "Toy Programming Language Compiler" in result.stdout
 
-    def test_cli_version(self, luna_py):
+    def test_cli_version(self, toy_py):
         """Test --version option."""
         result = subprocess.run(
-            [sys.executable, str(luna_py), "--version"],
+            [sys.executable, str(toy_py), "--version"],
             capture_output=True,
             text=True
         )
         assert result.returncode == 0
-        assert "Luna Compiler" in result.stdout
+        assert "Toy Compiler" in result.stdout
 
-    def test_cli_run_example(self, luna_py):
+    def test_cli_run_example(self, toy_py):
         """Test running an example program."""
         result = subprocess.run(
-            [sys.executable, str(luna_py), str(EXAMPLES_DIR / "hello_world.luna")],
+            [sys.executable, str(toy_py), str(EXAMPLES_DIR / "hello_world.toy")],
             capture_output=True,
             text=True,
             timeout=30
@@ -377,10 +377,10 @@ class TestCLI:
         assert result.returncode == 0
         assert "Hello, World!" in result.stdout
 
-    def test_cli_tokens_output(self, luna_py):
+    def test_cli_tokens_output(self, toy_py):
         """Test --tokens option."""
         result = subprocess.run(
-            [sys.executable, str(luna_py), "--tokens", str(EXAMPLES_DIR / "hello_world.luna")],
+            [sys.executable, str(toy_py), "--tokens", str(EXAMPLES_DIR / "hello_world.toy")],
             capture_output=True,
             text=True
         )
@@ -388,10 +388,10 @@ class TestCLI:
         assert "Tokens:" in result.stdout
         assert "FN" in result.stdout
 
-    def test_cli_ir_output(self, luna_py):
+    def test_cli_ir_output(self, toy_py):
         """Test --ir option."""
         result = subprocess.run(
-            [sys.executable, str(luna_py), "--ir", str(EXAMPLES_DIR / "hello_world.luna")],
+            [sys.executable, str(toy_py), "--ir", str(EXAMPLES_DIR / "hello_world.toy")],
             capture_output=True,
             text=True
         )
@@ -399,10 +399,10 @@ class TestCLI:
         assert "Intermediate Representation:" in result.stdout
         assert "FUNCTION main" in result.stdout
 
-    def test_cli_llvm_output(self, luna_py):
+    def test_cli_llvm_output(self, toy_py):
         """Test --llvm option."""
         result = subprocess.run(
-            [sys.executable, str(luna_py), "--llvm", str(EXAMPLES_DIR / "hello_world.luna")],
+            [sys.executable, str(toy_py), "--llvm", str(EXAMPLES_DIR / "hello_world.toy")],
             capture_output=True,
             text=True
         )
@@ -410,10 +410,10 @@ class TestCLI:
         assert "LLVM IR:" in result.stdout
         assert "define i64" in result.stdout
 
-    def test_cli_file_not_found(self, luna_py):
+    def test_cli_file_not_found(self, toy_py):
         """Test error on non-existent file."""
         result = subprocess.run(
-            [sys.executable, str(luna_py), "nonexistent.luna"],
+            [sys.executable, str(toy_py), "nonexistent.toy"],
             capture_output=True,
             text=True
         )

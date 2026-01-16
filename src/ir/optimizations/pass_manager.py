@@ -1,5 +1,5 @@
 """
-Optimization Pass Manager for the Luna compiler.
+Optimization Pass Manager for the Toy compiler.
 
 The pass manager orchestrates running optimization passes on IR.
 It supports:

@@ -1,5 +1,5 @@
 """
-Tests for the Luna parser.
+Tests for the Toy parser.
 
 Tests cover:
 - Expression parsing with correct precedence
@@ -539,14 +539,14 @@ class TestExamplePrograms:
     """Test parsing of the example programs."""
 
     def test_hello_world(self):
-        with open("examples/hello_world.luna") as f:
+        with open("examples/hello_world.toy") as f:
             source = f.read()
         ast = parse_source(source)
         assert len(ast.functions) == 1
         assert ast.functions[0].name == "main"
 
     def test_fibonacci(self):
-        with open("examples/fibonacci.luna") as f:
+        with open("examples/fibonacci.toy") as f:
             source = f.read()
         ast = parse_source(source)
         assert len(ast.functions) == 2
@@ -555,7 +555,7 @@ class TestExamplePrograms:
         assert "main" in func_names
 
     def test_factorial(self):
-        with open("examples/factorial.luna") as f:
+        with open("examples/factorial.toy") as f:
             source = f.read()
         ast = parse_source(source)
         assert len(ast.functions) == 2
@@ -563,7 +563,7 @@ class TestExamplePrograms:
         assert "factorial" in func_names
 
     def test_fizzbuzz(self):
-        with open("examples/fizzbuzz.luna") as f:
+        with open("examples/fizzbuzz.toy") as f:
             source = f.read()
         ast = parse_source(source)
         assert len(ast.functions) == 1

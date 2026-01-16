@@ -1,8 +1,8 @@
 """
-Type checker for the Luna compiler.
+Type checker for the Toy compiler.
 
 The type checker traverses the AST and verifies that all operations
-are type-safe according to Luna's type system. It:
+are type-safe according to Toy's type system. It:
 - Validates expression types
 - Checks assignment compatibility
 - Verifies function call arguments
@@ -36,7 +36,7 @@ from src.parser.ast_nodes import (
     Program,
 )
 from src.semantic.types import (
-    LunaType,
+    ToyType,
     FunctionType,
     INT, FLOAT, BOOL, STRING, VOID,
     type_from_annotation,
@@ -78,7 +78,7 @@ class TypeChecker(ASTVisitor):
         """
         self.symbol_table = symbol_table
         self.current_function: Optional[FunctionDecl] = None
-        self.current_function_type: Optional[LunaType] = None
+        self.current_function_type: Optional[ToyType] = None
         self.errors: List[SemanticError] = []
 
     def check(self, program: Program) -> List[SemanticError]:
@@ -105,7 +105,7 @@ class TypeChecker(ASTVisitor):
     # Expression Type Checking
     # =========================================================================
 
-    def visit_literal_expr(self, expr: LiteralExpr) -> LunaType:
+    def visit_literal_expr(self, expr: LiteralExpr) -> ToyType:
         """
         Type check a literal expression.
 
@@ -119,9 +119,9 @@ class TypeChecker(ASTVisitor):
         }
 
         if expr.literal_type is not None:
-            luna_type = type_from_annotation(expr.literal_type)
-            expr.resolved_type = luna_type
-            return luna_type
+            toy_type = type_from_annotation(expr.literal_type)
+            expr.resolved_type = toy_type
+            return toy_type
 
         # Fallback: infer from value type
         if isinstance(expr.value, bool):
@@ -140,7 +140,7 @@ class TypeChecker(ASTVisitor):
         self._error(f"Unknown literal type for value: {expr.value}", expr.line, expr.column)
         return VOID
 
-    def visit_variable_expr(self, expr: VariableExpr) -> LunaType:
+    def visit_variable_expr(self, expr: VariableExpr) -> ToyType:
         """
         Type check a variable reference.
 
@@ -155,7 +155,7 @@ class TypeChecker(ASTVisitor):
         expr.resolved_type = symbol.type
         return symbol.type
 
-    def visit_binary_expr(self, expr: BinaryExpr) -> LunaType:
+    def visit_binary_expr(self, expr: BinaryExpr) -> ToyType:
         """
         Type check a binary expression.
 
@@ -178,7 +178,7 @@ class TypeChecker(ASTVisitor):
         expr.resolved_type = result_type
         return result_type
 
-    def visit_unary_expr(self, expr: UnaryExpr) -> LunaType:
+    def visit_unary_expr(self, expr: UnaryExpr) -> ToyType:
         """
         Type check a unary expression.
 
@@ -197,13 +197,13 @@ class TypeChecker(ASTVisitor):
         expr.resolved_type = result_type
         return result_type
 
-    def visit_grouping_expr(self, expr: GroupingExpr) -> LunaType:
+    def visit_grouping_expr(self, expr: GroupingExpr) -> ToyType:
         """Type check a grouping expression (parenthesized expression)."""
         inner_type = expr.expression.accept(self)
         expr.resolved_type = inner_type
         return inner_type
 
-    def visit_call_expr(self, expr: CallExpr) -> LunaType:
+    def visit_call_expr(self, expr: CallExpr) -> ToyType:
         """
         Type check a function call expression.
 
@@ -267,7 +267,7 @@ class TypeChecker(ASTVisitor):
         expr.resolved_type = func_type.return_type
         return func_type.return_type
 
-    def visit_assignment_expr(self, expr: AssignmentExpr) -> LunaType:
+    def visit_assignment_expr(self, expr: AssignmentExpr) -> ToyType:
         """
         Type check an assignment expression.
 

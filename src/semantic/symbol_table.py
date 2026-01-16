@@ -1,5 +1,5 @@
 """
-Symbol table for the Luna compiler.
+Symbol table for the Toy compiler.
 
 The symbol table manages variable and function declarations across scopes.
 It supports:
@@ -13,7 +13,7 @@ from typing import Dict, Optional, List
 from dataclasses import dataclass, field
 from enum import Enum, auto
 
-from src.semantic.types import LunaType, FunctionType
+from src.semantic.types import ToyType, FunctionType
 
 
 class SymbolKind(Enum):
@@ -31,14 +31,14 @@ class Symbol:
 
     Attributes:
         name: The symbol's identifier
-        type: The symbol's Luna type
+        type: The symbol's Toy type
         kind: Kind of symbol (variable, constant, function, parameter)
         line: Line number where symbol was declared
         column: Column number where symbol was declared
         is_initialized: Whether the symbol has been assigned a value
     """
     name: str
-    type: LunaType
+    type: ToyType
     kind: SymbolKind
     line: int = 0
     column: int = 0
@@ -253,8 +253,8 @@ class SymbolTable:
     def define_builtin_function(
         self,
         name: str,
-        param_types: List[LunaType],
-        return_type: LunaType
+        param_types: List[ToyType],
+        return_type: ToyType
     ) -> Symbol:
         """
         Define a built-in function in the global scope.
@@ -286,7 +286,7 @@ class SymbolTable:
 
 def create_symbol_table_with_builtins() -> SymbolTable:
     """
-    Create a symbol table pre-populated with Luna's built-in functions.
+    Create a symbol table pre-populated with Toy's built-in functions.
 
     Built-in functions:
     - print(value: any) -> void

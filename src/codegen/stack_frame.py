@@ -1,7 +1,7 @@
 """
 Stack Frame Layout for x86-64 Code Generation.
 
-This module handles stack frame management for the Luna compiler,
+This module handles stack frame management for the Toy compiler,
 including:
 - Assigning stack offsets to SSA variables
 - Tracking frame size for prologue/epilogue

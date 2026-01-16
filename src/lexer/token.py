@@ -1,8 +1,8 @@
 """
-Token definitions for the Luna compiler.
+Token definitions for the Toy compiler.
 
 This module defines:
-- TokenType: Enum of all token types in the Luna language
+- TokenType: Enum of all token types in the Toy language
 - Token: Class representing a single token with position information
 """
 
@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 
 class TokenType(Enum):
-    """All token types in the Luna language."""
+    """All token types in the Toy language."""
 
     # Keywords
     FN = auto()          # fn
@@ -100,7 +100,7 @@ KEYWORDS = {
 @dataclass
 class Token:
     """
-    Represents a single token in the Luna language.
+    Represents a single token in the Toy language.
 
     Attributes:
         type: The type of token (from TokenType enum)
@@ -217,7 +217,7 @@ def create_token(
 
 # Helper function to check if a string is a keyword
 def is_keyword(text: str) -> bool:
-    """Check if the given text is a Luna keyword."""
+    """Check if the given text is a Toy keyword."""
     return text in KEYWORDS
 
 

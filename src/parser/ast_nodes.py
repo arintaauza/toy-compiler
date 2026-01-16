@@ -1,7 +1,7 @@
 """
-Abstract Syntax Tree (AST) node definitions for the Luna compiler.
+Abstract Syntax Tree (AST) node definitions for the Toy compiler.
 
-This module defines all AST node types used to represent Luna programs
+This module defines all AST node types used to represent Toy programs
 after parsing. The AST is a hierarchical representation of the source code
 structure that can be traversed for semantic analysis and code generation.
 
@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
 
 class TypeAnnotation(Enum):
-    """Type annotations available in Luna."""
+    """Type annotations available in Toy."""
     INT = auto()
     FLOAT = auto()
     BOOL = auto()
@@ -225,7 +225,7 @@ class AssignmentExpr(Expression):
     """
     Represents an assignment expression.
 
-    Note: In Luna, assignment is an expression that returns the assigned value.
+    Note: In Toy, assignment is an expression that returns the assigned value.
 
     Examples:
         x = 42
@@ -418,7 +418,7 @@ class FunctionDecl(Declaration):
 @dataclass
 class Program(Declaration):
     """
-    Represents a complete Luna program (root of the AST).
+    Represents a complete Toy program (root of the AST).
 
     A program consists of:
     - Global variable/constant declarations

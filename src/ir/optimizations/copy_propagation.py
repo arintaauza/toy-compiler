@@ -1,5 +1,5 @@
 """
-Copy Propagation Optimization Pass for the Luna compiler.
+Copy Propagation Optimization Pass for the Toy compiler.
 
 Copy propagation replaces uses of a variable with its source when the
 variable is just a copy. This enables further optimizations and reduces

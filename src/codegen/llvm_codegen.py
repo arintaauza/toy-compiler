@@ -1,11 +1,11 @@
 """
-LLVM IR Code Generator for the Luna compiler.
+LLVM IR Code Generator for the Toy compiler.
 
-This module generates LLVM IR from Luna's SSA-based IR using the llvmlite library.
+This module generates LLVM IR from Toy's SSA-based IR using the llvmlite library.
 LLVM provides world-class optimizations and multi-target support (x86, ARM, etc.).
 
 Key features:
-- Direct mapping from Luna SSA IR to LLVM IR
+- Direct mapping from Toy SSA IR to LLVM IR
 - JIT compilation support via MCJIT
 - Multiple target architecture support
 - Integration with LLVM optimization passes
@@ -25,9 +25,9 @@ from src.ir.instructions import (
 
 class LLVMCodeGenerator:
     """
-    Generates LLVM IR from Luna's SSA-based IR.
+    Generates LLVM IR from Toy's SSA-based IR.
 
-    The generator maintains mappings between Luna IR values and LLVM values,
+    The generator maintains mappings between Toy IR values and LLVM values,
     handling the translation of instructions, control flow, and function calls.
 
     Example:
@@ -52,13 +52,13 @@ class LLVMCodeGenerator:
         # Current function being generated
         self.func: Optional[ir.Function] = None
 
-        # Maps Luna IRValue key (name_version) -> LLVM Value
+        # Maps Toy IRValue key (name_version) -> LLVM Value
         self.value_map: Dict[str, ir.Value] = {}
 
-        # Maps Luna function name -> LLVM Function
+        # Maps Toy function name -> LLVM Function
         self.function_map: Dict[str, ir.Function] = {}
 
-        # Maps Luna block label -> LLVM BasicBlock
+        # Maps Toy block label -> LLVM BasicBlock
         self.block_map: Dict[str, ir.Block] = {}
 
         # Maps string content -> global string constant
@@ -72,10 +72,10 @@ class LLVMCodeGenerator:
 
     def generate(self, ir_module: IRModule) -> ir.Module:
         """
-        Generate LLVM IR from a Luna IR module.
+        Generate LLVM IR from a Toy IR module.
 
         Args:
-            ir_module: The Luna IR module to compile
+            ir_module: The Toy IR module to compile
 
         Returns:
             LLVM IR module
@@ -99,10 +99,10 @@ class LLVMCodeGenerator:
 
     def _get_llvm_type(self, ir_type: IRType) -> ir.Type:
         """
-        Convert Luna IRType to LLVM type.
+        Convert Toy IRType to LLVM type.
 
         Args:
-            ir_type: Luna IR type
+            ir_type: Toy IR type
 
         Returns:
             Corresponding LLVM type
@@ -128,10 +128,10 @@ class LLVMCodeGenerator:
 
     def _declare_function(self, func: IRFunction) -> None:
         """
-        Declare a Luna function in LLVM IR.
+        Declare a Toy function in LLVM IR.
 
         Args:
-            func: Luna IR function
+            func: Toy IR function
         """
         # Build parameter types
         param_types = [self._get_llvm_type(p.ir_type) for p in func.parameters]
@@ -151,10 +151,10 @@ class LLVMCodeGenerator:
 
     def _generate_function(self, func: IRFunction) -> None:
         """
-        Generate LLVM IR for a Luna function body.
+        Generate LLVM IR for a Toy function body.
 
         Args:
-            func: Luna IR function
+            func: Toy IR function
         """
         self.func = self.function_map[func.name]
         self.value_map.clear()
@@ -165,7 +165,7 @@ class LLVMCodeGenerator:
             key = f"{param.name}_0"
             self.value_map[key] = self.func.args[i]
 
-        # Create LLVM basic blocks for all Luna blocks
+        # Create LLVM basic blocks for all Toy blocks
         for label in self._get_block_order(func):
             llvm_block = self.func.append_basic_block(name=label)
             self.block_map[label] = llvm_block
@@ -198,7 +198,7 @@ class LLVMCodeGenerator:
         which are handled by phi nodes).
 
         Args:
-            func: Luna IR function
+            func: Toy IR function
 
         Returns:
             List of block labels in reverse postorder
@@ -239,7 +239,7 @@ class LLVMCodeGenerator:
         Generate phi node placeholders at the start of a block.
 
         Args:
-            block: Luna basic block
+            block: Toy basic block
 
         Returns:
             Dictionary of phi node key -> LLVM phi instruction
@@ -262,7 +262,7 @@ class LLVMCodeGenerator:
         Fill in incoming values for phi nodes after all blocks are generated.
 
         Args:
-            block: Luna basic block
+            block: Toy basic block
         """
         for instr in block.instructions:
             if not isinstance(instr, Phi):
@@ -282,7 +282,7 @@ class LLVMCodeGenerator:
         Generate LLVM IR for a single instruction.
 
         Args:
-            instr: Luna IR instruction
+            instr: Toy IR instruction
         """
         if isinstance(instr, LoadConst):
             self._gen_load_const(instr)
@@ -310,10 +310,10 @@ class LLVMCodeGenerator:
 
     def _get_value(self, value: IRValue) -> ir.Value:
         """
-        Get the LLVM value for a Luna IRValue.
+        Get the LLVM value for a Toy IRValue.
 
         Args:
-            value: Luna IR value
+            value: Toy IR value
 
         Returns:
             Corresponding LLVM value
@@ -329,10 +329,10 @@ class LLVMCodeGenerator:
 
     def _set_value(self, ir_value: IRValue, llvm_value: ir.Value) -> None:
         """
-        Store a mapping from Luna IRValue to LLVM value.
+        Store a mapping from Toy IRValue to LLVM value.
 
         Args:
-            ir_value: Luna IR value
+            ir_value: Toy IR value
             llvm_value: LLVM value
         """
         key = self._value_key(ir_value)
@@ -340,10 +340,10 @@ class LLVMCodeGenerator:
 
     def _get_constant(self, value: IRValue) -> ir.Constant:
         """
-        Get an LLVM constant for a Luna constant value.
+        Get an LLVM constant for a Toy constant value.
 
         Args:
-            value: Luna constant IR value
+            value: Toy constant IR value
 
         Returns:
             LLVM constant
@@ -548,10 +548,10 @@ class LLVMCodeGenerator:
 
 def generate_llvm_ir(module: IRModule) -> ir.Module:
     """
-    Generate LLVM IR from a Luna IR module.
+    Generate LLVM IR from a Toy IR module.
 
     Args:
-        module: The Luna IR module to compile
+        module: The Toy IR module to compile
 
     Returns:
         LLVM IR module

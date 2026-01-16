@@ -1,8 +1,8 @@
-# Luna Compiler Design Document
+# Toy Compiler Design Document
 
 ## Architecture Overview
 
-The Luna compiler follows the classic **multi-pass compiler** architecture with clear separation between phases.
+The Toy compiler follows the classic **multi-pass compiler** architecture with clear separation between phases.
 
 ```
 Source Code
@@ -316,8 +316,8 @@ return x      // Return value
 
 **Example Translation**
 
-Luna code:
-```luna
+Toy code:
+```toy
 let x: int = (a + b) * (c - d);
 ```
 
@@ -333,8 +333,8 @@ x = t3
 
 **If Statement**
 
-Luna:
-```luna
+Toy:
+```toy
 if x > 0 {
     y = 1;
 } else {
@@ -354,8 +354,8 @@ L2: // continue
 
 **While Loop**
 
-Luna:
-```luna
+Toy:
+```toy
 while i < 10 {
     i = i + 1;
 }
@@ -494,7 +494,7 @@ true && false  →  false
 ### Dead Code Elimination
 
 Remove unreachable code:
-```luna
+```toy
 if false {
     print("never runs");  // Remove this
 }
@@ -502,7 +502,7 @@ if false {
 
 ### Common Subexpression Elimination
 
-```luna
+```toy
 let a: int = x + y;
 let b: int = x + y;  // Reuse first computation
 ```
@@ -523,7 +523,7 @@ b = t1  // Don't recalculate
 
 ### Integration Tests
 - Test full pipeline
-- Use real Luna programs
+- Use real Toy programs
 - Verify correct output
 
 ### Test Pyramid

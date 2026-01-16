@@ -1,5 +1,5 @@
 """
-Algebraic Simplification Optimization Pass for the Luna compiler.
+Algebraic Simplification Optimization Pass for the Toy compiler.
 
 Algebraic simplification applies mathematical identities to simplify
 expressions. This reduces computation and enables further optimizations.

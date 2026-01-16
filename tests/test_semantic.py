@@ -1,5 +1,5 @@
 """
-Tests for the Luna semantic analyzer.
+Tests for the Toy semantic analyzer.
 
 Tests cover:
 - Type system
@@ -11,7 +11,7 @@ Tests cover:
 
 import pytest
 from src.semantic.types import (
-    LunaType,
+    ToyType,
     PrimitiveType,
     FunctionType,
     INT, FLOAT, BOOL, STRING, VOID,
@@ -733,17 +733,17 @@ class TestExamplePrograms:
     """Test the example programs pass semantic analysis."""
 
     def test_hello_world(self):
-        with open("examples/hello_world.luna") as f:
+        with open("examples/hello_world.toy") as f:
             analyze_source(f.read())
 
     def test_fibonacci(self):
-        with open("examples/fibonacci.luna") as f:
+        with open("examples/fibonacci.toy") as f:
             analyze_source(f.read())
 
     def test_factorial(self):
-        with open("examples/factorial.luna") as f:
+        with open("examples/factorial.toy") as f:
             analyze_source(f.read())
 
     def test_fizzbuzz(self):
-        with open("examples/fizzbuzz.luna") as f:
+        with open("examples/fizzbuzz.toy") as f:
             analyze_source(f.read())

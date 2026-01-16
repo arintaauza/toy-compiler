@@ -1,5 +1,5 @@
 """
-Control Flow Graph (CFG) for the Luna compiler.
+Control Flow Graph (CFG) for the Toy compiler.
 
 The CFG represents the control flow structure of a function:
 - Nodes are basic blocks

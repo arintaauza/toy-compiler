@@ -1,5 +1,5 @@
 """
-Semantic analysis module for the Luna compiler.
+Semantic analysis module for the Toy compiler.
 
 This module provides:
 - Type system (types.py)
@@ -10,7 +10,7 @@ This module provides:
 
 from src.semantic.types import (
     # Types
-    LunaType,
+    ToyType,
     PrimitiveType,
     FunctionType,
     # Built-in type instances
@@ -48,7 +48,7 @@ from src.semantic.semantic_analyzer import (
 
 __all__ = [
     # Types
-    "LunaType",
+    "ToyType",
     "PrimitiveType",
     "FunctionType",
     "INT",

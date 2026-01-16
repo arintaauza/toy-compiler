@@ -1,5 +1,5 @@
 """
-Parser module for the Luna compiler.
+Parser module for the Toy compiler.
 
 This module provides:
 - AST node definitions (ast_nodes.py)

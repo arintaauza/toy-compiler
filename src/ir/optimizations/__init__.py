@@ -1,5 +1,5 @@
 """
-IR Optimization Passes for the Luna compiler.
+IR Optimization Passes for the Toy compiler.
 
 This module provides a collection of optimization passes that transform
 the SSA-based IR to improve performance and reduce code size.

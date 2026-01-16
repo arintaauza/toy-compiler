@@ -1,6 +1,6 @@
-# Luna Compiler Internals
+# Toy Compiler Internals
 
-This document provides detailed documentation of the Luna compiler's internal implementation, including the type system, symbol table, IR generation, and optimization passes.
+This document provides detailed documentation of the Toy compiler's internal implementation, including the type system, symbol table, IR generation, and optimization passes.
 
 ## Table of Contents
 
@@ -19,12 +19,12 @@ This document provides detailed documentation of the Luna compiler's internal im
 
 ### Overview
 
-Luna uses a **static, strong type system** with no implicit type conversions. All types are determined at compile time, and type mismatches result in compilation errors.
+Toy uses a **static, strong type system** with no implicit type conversions. All types are determined at compile time, and type mismatches result in compilation errors.
 
 ### Type Hierarchy
 
 ```
-LunaType (abstract base)
+ToyType (abstract base)
 ├── PrimitiveType
 │   ├── INT      (64-bit signed integer)
 │   ├── FLOAT    (64-bit floating point)
@@ -32,8 +32,8 @@ LunaType (abstract base)
 │   ├── STRING   (string literal)
 │   └── VOID     (no value)
 └── FunctionType
-    ├── parameter_types: List[LunaType]
-    └── return_type: LunaType
+    ├── parameter_types: List[ToyType]
+    └── return_type: ToyType
 ```
 
 ### Built-in Types
@@ -70,16 +70,16 @@ LunaType (abstract base)
 
 ```python
 # Get result type of binary operation
-get_binary_result_type(op: str, left: LunaType, right: LunaType) -> Optional[LunaType]
+get_binary_result_type(op: str, left: ToyType, right: ToyType) -> Optional[ToyType]
 
 # Get result type of unary operation
-get_unary_result_type(op: str, operand: LunaType) -> Optional[LunaType]
+get_unary_result_type(op: str, operand: ToyType) -> Optional[ToyType]
 
 # Check if assignment is valid
-is_assignable(target_type: LunaType, value_type: LunaType) -> bool
+is_assignable(target_type: ToyType, value_type: ToyType) -> bool
 
-# Convert AST TypeAnnotation to LunaType
-type_from_annotation(annotation: TypeAnnotation) -> LunaType
+# Convert AST TypeAnnotation to ToyType
+type_from_annotation(annotation: TypeAnnotation) -> ToyType
 ```
 
 ### Design Decisions
@@ -105,7 +105,7 @@ The symbol table manages all named entities (variables, functions, parameters) a
 @dataclass
 class Symbol:
     name: str           # Identifier name
-    type: LunaType      # Type of the symbol
+    type: ToyType      # Type of the symbol
     kind: SymbolKind    # VARIABLE, CONSTANT, FUNCTION, PARAMETER
     line: int           # Declaration line number
     column: int         # Declaration column number
@@ -145,7 +145,7 @@ class SymbolTable:
 
 ### Scope Chain Example
 
-```luna
+```toy
 fn foo(x: int) -> int {     // Global scope + function scope
     let y: int = 10;        // y in function scope
     if x > 0 {              // Block scope
@@ -198,7 +198,7 @@ The type checker implements the visitor pattern to traverse the AST and validate
 
 #### Variable Declarations
 
-```luna
+```toy
 let x: int = "hello";  // Error: Cannot initialize 'int' with 'string'
 ```
 
@@ -208,7 +208,7 @@ Checks:
 
 #### Assignments
 
-```luna
+```toy
 let x: int = 5;
 x = true;  // Error: Cannot assign 'bool' to 'int'
 ```
@@ -220,7 +220,7 @@ Checks:
 
 #### Binary Expressions
 
-```luna
+```toy
 let x: int = 5 + "hello";  // Error: Invalid operand types for '+': 'int' and 'string'
 ```
 
@@ -230,7 +230,7 @@ Checks:
 
 #### Function Calls
 
-```luna
+```toy
 fn add(a: int, b: int) -> int { return a + b; }
 add(1, "two");  // Error: Argument 2 has wrong type: expected 'int', got 'string'
 ```
@@ -242,7 +242,7 @@ Checks:
 
 #### Return Statements
 
-```luna
+```toy
 fn foo() -> int {
     return "hello";  // Error: Return type mismatch: expected 'int', got 'string'
 }
@@ -255,7 +255,7 @@ Checks:
 
 #### Control Flow Conditions
 
-```luna
+```toy
 if 42 { ... }  // Error: If condition must be a boolean, got 'int'
 while "loop" { ... }  // Error: While condition must be a boolean, got 'string'
 ```
@@ -283,7 +283,7 @@ def check(self, program: Program) -> List[SemanticError]:
 
 ### SSA Form
 
-Luna's IR uses **Static Single Assignment (SSA)** form where:
+Toy's IR uses **Static Single Assignment (SSA)** form where:
 - Each variable is assigned exactly once
 - Variables are versioned (e.g., `x_0`, `x_1`, `x_2`)
 - Phi functions merge values at control flow join points
@@ -317,8 +317,8 @@ class BasicBlock:
 
 ### Example IR
 
-Luna source:
-```luna
+Toy source:
+```toy
 fn max(a: int, b: int) -> int {
     if a > b {
         return a;
@@ -512,7 +512,7 @@ _add:
 
 #### Type Mapping
 
-| Luna Type | LLVM Type |
+| Toy Type | LLVM Type |
 |-----------|-----------|
 | `int` | `i64` |
 | `float` | `double` |

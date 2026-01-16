@@ -1,5 +1,5 @@
 """
-x86-64 Assembly Code Generator for the Luna compiler.
+x86-64 Assembly Code Generator for the Toy compiler.
 
 This module generates x86-64 assembly code from SSA-based IR,
 targeting macOS with System V AMD64 ABI calling convention.

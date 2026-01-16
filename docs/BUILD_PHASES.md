@@ -1,6 +1,6 @@
-# Luna Compiler - Implementation Roadmap
+# Toy Compiler - Implementation Roadmap
 
-This document provides a step-by-step guide to building the Luna compiler from scratch.
+This document provides a step-by-step guide to building the Toy compiler from scratch.
 
 ## Overview
 
@@ -80,7 +80,7 @@ def test_basic_tokens():
 ✅ Lexer that converts source code to tokens
 ✅ Comprehensive error messages
 ✅ 100% test coverage for lexer
-✅ Can run: `python -m lexer.lexer examples/hello.luna`
+✅ Can run: `python -m lexer.lexer examples/hello.toy`
 
 ---
 
@@ -172,10 +172,10 @@ def test_parse_function():
 ### Deliverables
 
 ✅ Parser that builds AST from tokens
-✅ Handles all Luna language constructs
+✅ Handles all Toy language constructs
 ✅ Good error messages with recovery
 ✅ Can visualize AST
-✅ Can run: `python -m parser.parser --ast examples/hello.luna`
+✅ Can run: `python -m parser.parser --ast examples/hello.toy`
 
 ---
 
@@ -264,7 +264,7 @@ def test_type_mismatch():
 ✅ Type checker that validates all operations
 ✅ Semantic error detection
 ✅ Helpful error messages
-✅ Can run: `python -m semantic.semantic_analyzer examples/test.luna`
+✅ Can run: `python -m semantic.semantic_analyzer examples/test.toy`
 
 ---
 
@@ -402,7 +402,7 @@ FUNCTION counter() -> int:
 ✅ IR generator from AST with SSA construction
 ✅ CFG with basic blocks and Phi functions
 ✅ Human-readable SSA IR output
-✅ Can run: `python luna.py --ir examples/test.luna`
+✅ Can run: `python toy.py --ir examples/test.toy`
 
 ---
 
@@ -631,7 +631,7 @@ Simplify control flow structures.
 ✅ 6 optimization passes implemented
 ✅ Pass manager with fixed-point iteration
 ✅ Tests for all optimizations (52 tests)
-✅ Can run: `python luna.py --optimize --ir examples/test.luna`
+✅ Can run: `python toy.py --optimize --ir examples/test.toy`
 ✅ Measurable improvement on benchmarks
 
 ---
@@ -802,7 +802,7 @@ We use a simple **stack-based code generation** approach:
 ✅ Stack-based variable allocation (simple but correct)
 ✅ System V AMD64 ABI compliance
 ✅ Built-in print() function via printf
-✅ Full compilation pipeline (Luna → Assembly → Binary)
+✅ Full compilation pipeline (Toy → Assembly → Binary)
 ✅ Comprehensive tests (39 tests)
 ✅ Can compile and run: Fibonacci, factorial, recursive functions, while loops
 ✅ Can run: `from src.codegen import compile_and_run; result = compile_and_run(source)`
@@ -848,7 +848,7 @@ If assembly is too challenging initially, implement a tree-walking interpreter:
 
 ### Overview
 
-LLVM IR is generated from Luna's SSA-based IR using the **llvmlite** Python library. By targeting LLVM IR, you get:
+LLVM IR is generated from Toy's SSA-based IR using the **llvmlite** Python library. By targeting LLVM IR, you get:
 - World-class optimizations (LLVM's optimization passes)
 - Multiple target architectures (x86, ARM, RISC-V, etc.)
 - Integration with existing toolchains
@@ -891,7 +891,7 @@ We use **llvmlite**, a lightweight Python binding for LLVM. This provides:
 - [x] Return: ret instruction
 
 #### 7.5: Control Flow
-- [x] Create LLVM basic blocks for Luna basic blocks
+- [x] Create LLVM basic blocks for Toy basic blocks
 - [x] Implement reverse postorder block traversal for SSA dominance
 - [x] Handle phi nodes with deferred incoming value resolution
 
@@ -903,7 +903,7 @@ We use **llvmlite**, a lightweight Python binding for LLVM. This provides:
 
 #### 7.7: High-Level API
 - [x] Create `src/codegen/llvm_emitter.py`
-- [x] `compile_to_llvm_ir()` - Luna source → LLVM IR text
+- [x] `compile_to_llvm_ir()` - Toy source → LLVM IR text
 - [x] `compile_and_run_llvm()` - JIT compile and execute
 - [x] `compile_to_object()` - Generate native .o file
 - [x] `LLVMJITEngine` - Reusable JIT execution engine
@@ -926,7 +926,7 @@ We use **llvmlite**, a lightweight Python binding for LLVM. This provides:
 - `tests/test_llvm_codegen.py` - Comprehensive tests
 
 **Key Classes:**
-- `LLVMCodeGenerator` - Translates Luna IR to LLVM IR
+- `LLVMCodeGenerator` - Translates Toy IR to LLVM IR
 - `LLVMCompileResult` - JIT execution result
 - `LLVMJITEngine` - Reusable JIT compilation engine
 
@@ -994,7 +994,7 @@ entry0:
 ### Deliverables
 
 ✅ LLVM IR code generator using llvmlite
-✅ Direct mapping from Luna SSA IR to LLVM IR
+✅ Direct mapping from Toy SSA IR to LLVM IR
 ✅ JIT compilation and execution via MCJIT
 ✅ Object file generation for native binaries
 ✅ Integration with LLVM optimization passes
@@ -1017,7 +1017,7 @@ entry0:
 ### Tasks
 
 #### 8.1: CLI Tool
-- [x] Create `luna.py` main entry point
+- [x] Create `toy.py` main entry point
 - [x] Add command-line argument parsing with argparse
 - [x] Add compilation options:
   - [x] `--tokens` (show tokenization)
@@ -1035,13 +1035,13 @@ entry0:
 
 **Example Usage:**
 ```bash
-python luna.py examples/fibonacci.luna              # Compile and run
-python luna.py --optimize examples/fibonacci.luna   # With optimizations
-python luna.py --asm -o fib.s examples/fibonacci.luna  # Generate assembly
-python luna.py --llvm examples/fibonacci.luna       # Generate LLVM IR
-python luna.py --ir examples/test.luna              # Show IR
-python luna.py --tokens examples/hello_world.luna   # Show tokens
-python luna.py --verbose examples/factorial.luna    # With stats
+python toy.py examples/fibonacci.toy              # Compile and run
+python toy.py --optimize examples/fibonacci.toy   # With optimizations
+python toy.py --asm -o fib.s examples/fibonacci.toy  # Generate assembly
+python toy.py --llvm examples/fibonacci.toy       # Generate LLVM IR
+python toy.py --ir examples/test.toy              # Show IR
+python toy.py --tokens examples/hello_world.toy   # Show tokens
+python toy.py --verbose examples/factorial.toy    # With stats
 ```
 
 #### 8.2: Error Messages
@@ -1059,24 +1059,24 @@ python luna.py --verbose examples/factorial.luna    # With stats
 - [x] Add integration tests (full pipeline) - 39 tests
 - [x] Test all example programs
 - [x] Add negative tests (programs that should fail)
-- [x] Create test suite with diverse Luna programs
+- [x] Create test suite with diverse Toy programs
 
 #### 8.5: Example Programs
-- [x] hello_world.luna (basic I/O)
-- [x] fibonacci.luna (recursion)
-- [x] factorial.luna (recursion)
-- [x] fizzbuzz.luna (conditionals)
-- [x] prime_checker.luna (modulo, functions)
-- [x] gcd.luna (GCD/LCM algorithms)
-- [x] power.luna (fast exponentiation)
-- [x] sum_of_digits.luna (digit manipulation)
-- [x] collatz.luna (Collatz conjecture)
+- [x] hello_world.toy (basic I/O)
+- [x] fibonacci.toy (recursion)
+- [x] factorial.toy (recursion)
+- [x] fizzbuzz.toy (conditionals)
+- [x] prime_checker.toy (modulo, functions)
+- [x] gcd.toy (GCD/LCM algorithms)
+- [x] power.toy (fast exponentiation)
+- [x] sum_of_digits.toy (digit manipulation)
+- [x] collatz.toy (Collatz conjecture)
 - [x] triangle.lua (triangle numbers)
 
 ### Implementation Summary
 
 **Files Created:**
-- `luna.py` - Main CLI entry point with argparse
+- `toy.py` - Main CLI entry point with argparse
 - `tests/test_integration.py` - 39 integration tests
 - 6 new example programs in `examples/`
 
@@ -1103,16 +1103,16 @@ python luna.py --verbose examples/factorial.luna    # With stats
 **Example Programs: 10 total**
 ```
 examples/
-├── hello_world.luna      # Basic I/O
-├── fibonacci.luna        # Recursion
-├── factorial.luna        # Recursion
-├── fizzbuzz.luna         # Conditionals and modulo
-├── prime_checker.luna    # Prime number detection
-├── gcd.luna              # GCD/LCM algorithms
-├── power.luna            # Fast exponentiation
-├── sum_of_digits.luna    # Digit manipulation
-├── collatz.luna          # Collatz conjecture
-└── triangle.luna         # Triangle numbers
+├── hello_world.toy      # Basic I/O
+├── fibonacci.toy        # Recursion
+├── factorial.toy        # Recursion
+├── fizzbuzz.toy         # Conditionals and modulo
+├── prime_checker.toy    # Prime number detection
+├── gcd.toy              # GCD/LCM algorithms
+├── power.toy            # Fast exponentiation
+├── sum_of_digits.toy    # Digit manipulation
+├── collatz.toy          # Collatz conjecture
+└── triangle.toy         # Triangle numbers
 ```
 
 ### Deliverables
@@ -1135,13 +1135,13 @@ examples/
 
 ### Integration Tests
 - Test entire compiler pipeline
-- Use real Luna programs
+- Use real Toy programs
 - Verify output correctness
 
 ### Example Programs as Tests
 ```python
 def test_fibonacci_program():
-    result = compile_and_run("examples/fibonacci.luna")
+    result = compile_and_run("examples/fibonacci.toy")
     assert result.exit_code == 0
     assert "55" in result.output  # fibonacci(10)
 ```
@@ -1225,7 +1225,7 @@ git tag phase-1-complete
 
 **Ready to start?**
 
-1. Read [LANGUAGE_SPEC.md](LANGUAGE_SPEC.md) to understand Luna
+1. Read [LANGUAGE_SPEC.md](LANGUAGE_SPEC.md) to understand Toy
 2. Read [LEXER_DESIGN.md](LEXER_DESIGN.md) for Phase 1 details
 3. Create `src/lexer/token.py` and start implementing!
 

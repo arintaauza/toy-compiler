@@ -1,5 +1,5 @@
 """
-IR Pretty Printer for the Luna compiler.
+IR Pretty Printer for the Toy compiler.
 
 This module provides utilities for formatting and displaying IR code
 in a human-readable format. Supports multiple output formats:

@@ -1,7 +1,7 @@
 """
-Assembly File Emitter for the Luna compiler.
+Assembly File Emitter for the Toy compiler.
 
-This module provides high-level functions to compile Luna source code
+This module provides high-level functions to compile Toy source code
 to assembly files and optionally assemble/link them.
 
 Usage:
@@ -44,10 +44,10 @@ def compile_source_to_asm(
     module_name: str = "module"
 ) -> str:
     """
-    Compile Luna source code to x86-64 assembly.
+    Compile Toy source code to x86-64 assembly.
 
     Args:
-        source: Luna source code string
+        source: Toy source code string
         optimize: Whether to run optimization passes
         module_name: Name for the IR module
 
@@ -74,7 +74,7 @@ def compile_to_asm(
     optimize: bool = True
 ) -> None:
     """
-    Compile a Luna source file to an assembly file.
+    Compile a Toy source file to an assembly file.
 
     Args:
         source_path: Path to the .luna source file
@@ -152,10 +152,10 @@ def compile_and_run(
     timeout: float = 10.0
 ) -> CompileResult:
     """
-    Compile Luna source code, assemble, link, and run it.
+    Compile Toy source code, assemble, link, and run it.
 
     Args:
-        source: Luna source code string
+        source: Toy source code string
         optimize: Whether to run optimization passes
         timeout: Timeout in seconds for program execution
 
@@ -222,7 +222,7 @@ def compile_file_and_run(
     timeout: float = 10.0
 ) -> CompileResult:
     """
-    Compile a Luna source file, assemble, link, and run it.
+    Compile a Toy source file, assemble, link, and run it.
 
     Args:
         source_path: Path to the .luna source file
@@ -240,12 +240,12 @@ def compile_file_and_run(
 
 def print_assembly(source: str, optimize: bool = True) -> None:
     """
-    Print the generated assembly for Luna source code.
+    Print the generated assembly for Toy source code.
 
     Useful for debugging and learning.
 
     Args:
-        source: Luna source code string
+        source: Toy source code string
         optimize: Whether to run optimization passes
     """
     assembly = compile_source_to_asm(source, optimize)

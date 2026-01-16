@@ -126,6 +126,63 @@ call        → primary ("(" arguments? ")")*
 primary     → literal | identifier | "(" expression ")"
 ```
 
+### BNF Grammar to Parser Method Mapping
+
+The parser implements each BNF grammar rule as a corresponding method. This table provides traceability from the formal grammar specification to the implementation.
+
+| BNF Rule | Parser Method | Description |
+|----------|---------------|-------------|
+| `program → declaration* EOF` | `parse()` | Entry point, collects all declarations |
+| `declaration → funcDecl \| varDecl \| constDecl` | `_parse_declaration()` | Routes to appropriate declaration parser |
+| `funcDecl → "func" IDENTIFIER "(" params? ")" ":" type block` | `_parse_function_declaration()` | Parses function signature and body |
+| `varDecl → "let" IDENTIFIER ":" type ("=" expression)? ";"` | `_parse_variable_declaration()` | Parses mutable variable declaration |
+| `constDecl → "const" IDENTIFIER ":" type "=" expression ";"` | `_parse_variable_declaration()` | Parses constant declaration (is_const=True) |
+| `params → param ("," param)*` | `_parse_parameters()` | Parses parameter list |
+| `param → IDENTIFIER ":" type` | `_parse_parameter()` | Parses single parameter |
+| `type → "int" \| "float" \| "bool" \| "string" \| "void"` | `_parse_type()` | Parses type annotation |
+| `block → "{" statement* "}"` | `_parse_block()` | Parses block of statements |
+| `statement → exprStmt \| varDecl \| constDecl \| ifStmt \| whileStmt \| returnStmt \| block` | `_parse_statement()` | Routes to appropriate statement parser |
+| `ifStmt → "if" expression block ("else" (ifStmt \| block))?` | `_parse_if_statement()` | Parses if/else chains |
+| `whileStmt → "while" expression block` | `_parse_while_statement()` | Parses while loop |
+| `returnStmt → "return" expression? ";"` | `_parse_return_statement()` | Parses return statement |
+| `exprStmt → expression ";"` | `_parse_expression_statement()` | Expression as statement |
+| `expression → assignment` | `_parse_expression()` | Entry to expression parsing |
+| `assignment → IDENTIFIER "=" assignment \| logic_or` | `_parse_assignment()` | Right-associative assignment |
+| `logic_or → logic_and ("or" logic_and)*` | `_parse_or()` | Logical OR |
+| `logic_and → equality ("and" equality)*` | `_parse_and()` | Logical AND |
+| `equality → comparison (("==" \| "!=") comparison)*` | `_parse_equality()` | Equality operators |
+| `comparison → term (("<" \| ">" \| "<=" \| ">=") term)*` | `_parse_comparison()` | Relational operators |
+| `term → factor (("+" \| "-") factor)*` | `_parse_term()` | Addition/subtraction |
+| `factor → unary (("*" \| "/" \| "%") unary)*` | `_parse_factor()` | Multiplication/division/modulo |
+| `unary → ("!" \| "-") unary \| call` | `_parse_unary()` | Unary operators |
+| `call → primary ("(" arguments? ")")*` | `_parse_call()` | Function call |
+| `arguments → expression ("," expression)*` | (inline in `_parse_call()`) | Argument list |
+| `primary → literal \| IDENTIFIER \| "(" expression ")"` | `_parse_primary()` | Atoms: literals, variables, grouping |
+
+**Grammar-to-Code Pattern:**
+
+Each grammar rule follows a predictable implementation pattern:
+
+```python
+# For rule: A → B (("op1" | "op2") B)*
+def _parse_A(self):
+    left = self._parse_B()                    # Parse first operand
+    while self._match("op1", "op2"):          # While we see operators
+        operator = self._previous().value      # Get the operator
+        right = self._parse_B()               # Parse next operand
+        left = BinaryExpr(left, operator, right)  # Build AST node
+    return left
+
+# For rule: A → "keyword" ... | "other" ...
+def _parse_A(self):
+    if self._match("keyword"):
+        return self._parse_keyword_variant()
+    elif self._match("other"):
+        return self._parse_other_variant()
+    else:
+        self._error("Expected 'keyword' or 'other'")
+```
+
 ### Error Recovery
 - Panic mode: skip tokens until synchronization point
 - Synchronization points: semicolons, statement keywords

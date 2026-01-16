@@ -1,0 +1,45 @@
+// Sum of digits calculator
+// Demonstrates while loops and arithmetic
+
+fn sum_of_digits(n: int) -> int {
+    let sum: int = 0;
+    let num: int = n;
+
+    while num > 0 {
+        sum = sum + (num % 10);
+        num = num / 10;
+    }
+
+    return sum;
+}
+
+fn count_digits(n: int) -> int {
+    if n == 0 {
+        return 1;
+    }
+
+    let count: int = 0;
+    let num: int = n;
+
+    while num > 0 {
+        count = count + 1;
+        num = num / 10;
+    }
+
+    return count;
+}
+
+fn main() -> int {
+    let number: int = 12345;
+
+    print("Number:");
+    print(number);
+
+    print("Sum of digits:");
+    print(sum_of_digits(number));  // 1+2+3+4+5 = 15
+
+    print("Number of digits:");
+    print(count_digits(number));  // 5
+
+    return 0;
+}

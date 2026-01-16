@@ -1,0 +1,33 @@
+// Greatest Common Divisor (Euclidean algorithm)
+// Demonstrates recursion with multiple parameters
+
+fn gcd(a: int, b: int) -> int {
+    if b == 0 {
+        return a;
+    }
+    return gcd(b, a % b);
+}
+
+fn lcm(a: int, b: int) -> int {
+    return (a * b) / gcd(a, b);
+}
+
+fn main() -> int {
+    let x: int = 48;
+    let y: int = 18;
+
+    print("GCD and LCM Calculator");
+    print("Numbers:");
+    print(x);
+    print(y);
+
+    let g: int = gcd(x, y);
+    print("GCD:");
+    print(g);  // Should print 6
+
+    let l: int = lcm(x, y);
+    print("LCM:");
+    print(l);  // Should print 144
+
+    return 0;
+}

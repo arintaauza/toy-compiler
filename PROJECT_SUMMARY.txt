@@ -1,357 +1,226 @@
-╔══════════════════════════════════════════════════════════════════════════════╗
-║              LUNA COMPILER PROJECT - CREATED ✅                               ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+================================================================================
+                    LUNA COMPILER - PROJECT SUMMARY
+================================================================================
 
-PROJECT OVERVIEW:
-═══════════════════════════════════════════════════════════════════════════════
-
-Luna is a statically-typed, C-like programming language designed for learning
-compiler construction. This project provides a complete compiler implementation
-from source code to executable output.
+PROJECT STATUS: COMPLETE (All 8 Phases Implemented)
 
 Location: /Users/arinta/Documents/Arinta-Work/Code Claude/compiler_project
-Git: Initialized with initial commit (18 files, 2,110 lines)
+Tests: 390 passing
 
-═══════════════════════════════════════════════════════════════════════════════
-LANGUAGE FEATURES:
-═══════════════════════════════════════════════════════════════════════════════
+================================================================================
+WHAT IS LUNA?
+================================================================================
 
-✅ Static typing (int, float, bool, string, void)
-✅ Variables and constants (let, const)
-✅ Functions with parameters and return types
-✅ Control flow (if/else, while loops)
-✅ Expressions with operators (+, -, *, /, %, ==, !=, <, >, <=, >=, &&, ||, !)
-✅ Built-in functions (print, input, len)
-✅ C-like syntax (fn, let, return, {})
-✅ Comments (// single-line, /* multi-line */)
+Luna is a statically-typed, C-like programming language with:
 
-Example Luna Program:
+- Static typing: int, float, bool, string, void
+- Variables: let x: int = 42;
+- Functions: fn add(a: int, b: int) -> int { return a + b; }
+- Control flow: if/else, while loops
+- Operators: +, -, *, /, %, ==, !=, <, >, <=, >=, &&, ||, !
+- Built-in: print() function
+- Comments: // single-line, /* multi-line */
+
+Example:
 ```luna
 fn fibonacci(n: int) -> int {
-    if n <= 1 {
-        return n;
-    }
+    if n <= 1 { return n; }
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
 fn main() -> int {
-    let result: int = fibonacci(10);
-    print(result);  // Prints: 55
+    print(fibonacci(10));  // Prints: 55
     return 0;
 }
 ```
 
-═══════════════════════════════════════════════════════════════════════════════
-COMPILER ARCHITECTURE (8 Phases - Production Quality):
-═══════════════════════════════════════════════════════════════════════════════
+================================================================================
+COMPILER ARCHITECTURE
+================================================================================
 
 Source Code (.luna)
-    ↓
-[Phase 1] Lexical Analysis (Lexer)
-    → Tokens
-    ↓
-[Phase 2] Syntax Analysis (Parser)
-    → Abstract Syntax Tree (AST)
-    ↓
-[Phase 3] Semantic Analysis
-    → Type-checked AST + Symbol Table
-    ↓
-[Phase 4] Intermediate Representation
-    → Three-Address Code (TAC) + Control Flow Graph (CFG)
-    ↓
-[Phase 5] IR Optimizations
-    → Optimized IR (DCE, CSE, Constant Folding, Algebraic, Copy Propagation)
-    ↓
-[Phase 6] Assembly Code Generation
-    → x86-64 or ARM64 Assembly (with Register Allocation)
-    ↓
-[Phase 7] LLVM IR Generation (Optional)
-    → LLVM IR → Optimized with LLVM passes → Native Code
-    ↓
-[Phase 8] Production Polish
-    → Professional CLI, Benchmarks, Documentation
+       |
+       v
+[Phase 1] Lexer -----------------> Tokens
+       |
+       v
+[Phase 2] Parser ----------------> Abstract Syntax Tree (AST)
+       |
+       v
+[Phase 3] Semantic Analyzer -----> Type-checked AST + Symbol Table
+       |
+       v
+[Phase 4] IR Generator ----------> SSA-based IR + Control Flow Graph
+       |
+       v
+[Phase 5] Optimizer -------------> Optimized IR
+       |
+       +---> [Phase 6] x86-64 Codegen ---> Native Binary
+       |
+       +---> [Phase 7] LLVM Codegen -----> LLVM IR ---> Native Binary
 
-═══════════════════════════════════════════════════════════════════════════════
-PROJECT STRUCTURE:
-═══════════════════════════════════════════════════════════════════════════════
+[Phase 8] CLI Tool (luna.py) - Professional command-line interface
+
+================================================================================
+PROJECT STRUCTURE
+================================================================================
 
 compiler_project/
-├── README.md                    ← Project overview
+├── luna.py                    # CLI tool - main entry point
+├── README.md                  # Project overview
+├── requirements.txt           # Python dependencies (pytest, llvmlite)
+│
 ├── docs/
-│   ├── LANGUAGE_SPEC.md        ← Complete language specification (500+ lines)
-│   ├── COMPILER_DESIGN.md      ← Architecture deep dive (600+ lines)
-│   └── BUILD_PHASES.md         ← 6-week implementation roadmap (900+ lines)
+│   ├── LANGUAGE_SPEC.md       # Luna language specification
+│   ├── COMPILER_DESIGN.md     # Architecture overview
+│   ├── COMPILER_INTERNALS.md  # Type system, IR, optimizations
+│   └── BUILD_PHASES.md        # Implementation roadmap (completed)
+│
 ├── src/
-│   ├── lexer/                  ← Phase 1: Tokenization
-│   ├── parser/                 ← Phase 2: AST construction
-│   ├── semantic/               ← Phase 3: Type checking
-│   ├── ir/                     ← Phase 4: IR generation
-│   ├── codegen/                ← Phase 5: Code generation
-│   └── utils/                  ← Error handling, helpers
-├── tests/                      ← Test suite (TDD approach)
-├── examples/                   ← Luna example programs
-│   ├── hello_world.luna
-│   ├── fibonacci.luna
-│   ├── factorial.luna
-│   └── fizzbuzz.luna
-├── requirements.txt            ← Python dependencies
-├── .gitignore                  ← Git ignore rules
-└── luna.py                     ← CLI entry point (to be implemented)
+│   ├── lexer/
+│   │   ├── token.py           # TokenType enum, Token class
+│   │   └── lexer.py           # Lexical analyzer
+│   │
+│   ├── parser/
+│   │   ├── ast_nodes.py       # AST node classes, visitor pattern
+│   │   └── parser.py          # Recursive descent parser
+│   │
+│   ├── semantic/
+│   │   ├── types.py           # Type system (LunaType, PrimitiveType)
+│   │   ├── symbol_table.py    # Symbol table with scope chain
+│   │   ├── type_checker.py    # Type validation
+│   │   └── semantic_analyzer.py  # Main semantic analysis
+│   │
+│   ├── ir/
+│   │   ├── instructions.py    # IR instruction classes
+│   │   ├── cfg.py             # Control flow graph
+│   │   ├── ir_generator.py    # AST to SSA IR translation
+│   │   ├── ir_printer.py      # IR pretty printing
+│   │   ├── ssa.py             # SSA utilities
+│   │   └── optimizations/
+│   │       ├── pass_manager.py       # Optimization framework
+│   │       ├── constant_folding.py   # 2+3 -> 5
+│   │       ├── dead_code_elimination.py
+│   │       ├── cse.py                # Common subexpression elimination
+│   │       ├── copy_propagation.py
+│   │       ├── algebraic.py          # x*1 -> x
+│   │       └── control_flow.py       # Branch elimination
+│   │
+│   ├── codegen/
+│   │   ├── stack_frame.py     # Stack frame layout
+│   │   ├── x86_64_codegen.py  # x86-64 AT&T syntax generator
+│   │   ├── asm_emitter.py     # Assembly file generation
+│   │   ├── llvm_codegen.py    # LLVM IR generator
+│   │   └── llvm_emitter.py    # LLVM JIT compilation
+│   │
+│   └── utils/
+│       └── error.py           # Error classes
+│
+├── tests/
+│   ├── test_lexer.py          # 33 tests
+│   ├── test_parser.py         # 63 tests
+│   ├── test_semantic.py       # 65 tests
+│   ├── test_ir.py             # 58 tests
+│   ├── test_optimizations.py  # 52 tests
+│   ├── test_codegen.py        # 39 tests
+│   ├── test_llvm_codegen.py   # 41 tests
+│   └── test_integration.py    # 39 tests
+│
+└── examples/
+    ├── hello_world.luna       # Basic I/O
+    ├── fibonacci.luna         # Recursion
+    ├── factorial.luna         # Recursion
+    ├── fizzbuzz.luna          # Conditionals
+    ├── prime_checker.luna     # Prime detection
+    ├── gcd.luna               # GCD/LCM algorithms
+    ├── power.luna             # Fast exponentiation
+    ├── sum_of_digits.luna     # Digit manipulation
+    ├── collatz.luna           # Collatz conjecture
+    └── triangle.luna          # Triangle numbers
 
-═══════════════════════════════════════════════════════════════════════════════
-DOCUMENTATION CREATED (4 files, 4,000+ lines):
-═══════════════════════════════════════════════════════════════════════════════
+================================================================================
+USAGE
+================================================================================
 
-📖 LANGUAGE_SPEC.md (500+ lines)
-   ├─ Lexical structure (keywords, operators, literals)
-   ├─ Type system (int, float, bool, string, void)
-   ├─ Expressions (arithmetic, logical, comparison)
-   ├─ Statements (if, while, return, assignments)
-   ├─ Functions (declarations, calls, recursion)
-   ├─ Complete BNF grammar
-   ├─ Semantic rules
-   └─ Example programs
+# Compile and run a Luna program
+python luna.py examples/fibonacci.luna
 
-📖 COMPILER_DESIGN.md (600+ lines)
-   ├─ Architecture overview (8-phase pipeline)
-   ├─ Phase 1: Lexer design (tokenization algorithms)
-   ├─ Phase 2: Parser design (recursive descent, precedence climbing)
-   ├─ Phase 3: Semantic analysis (symbol tables, type checking)
-   ├─ Phase 4: IR design (three-address code)
-   ├─ Phase 5: Code generation strategies
-   ├─ Error handling patterns
-   ├─ Optimization opportunities
-   └─ Testing strategies
+# With optimizations
+python luna.py -O examples/fibonacci.luna
 
-📖 BUILD_PHASES.md (1,400+ lines)
-   ├─ Week 1: Lexical Analysis
-   │  └─ Tasks: Token definition, lexer implementation, testing
-   ├─ Week 2: Syntax Analysis
-   │  └─ Tasks: AST nodes, recursive descent parser, testing
-   ├─ Week 3: Semantic Analysis
-   │  └─ Tasks: Symbol table, type checker, semantic analyzer
-   ├─ Week 4: Intermediate Representation
-   │  └─ Tasks: TAC design, IR generator, CFG construction
-   ├─ Week 5: IR Optimizations
-   │  └─ Tasks: Constant folding, DCE, CSE, copy propagation, algebraic, pass manager
-   ├─ Week 6-7: Assembly Code Generation
-   │  └─ Tasks: Register allocation, x86-64 codegen, linking
-   ├─ Week 7-8: LLVM IR Generation (Optional)
-   │  └─ Tasks: LLVM type mapping, IR generation, optimization integration
-   ├─ Week 8-10: Polish & Production
-   │  └─ Tasks: CLI tool, error messages, benchmarks, documentation
-   └─ Complete task checklists for each phase (190+ tasks)
+# Show compilation stages
+python luna.py --tokens examples/hello_world.luna    # Show tokens
+python luna.py --ast examples/hello_world.luna       # Show AST
+python luna.py --ir examples/hello_world.luna        # Show IR
+python luna.py --ir-opt examples/hello_world.luna    # Show optimized IR
+python luna.py --asm examples/hello_world.luna       # Show x86-64 assembly
+python luna.py --llvm examples/hello_world.luna      # Show LLVM IR
 
-📖 IR_OPTIMIZATIONS.md (1,500+ lines) **NEW!**
-   ├─ Control Flow Graph (CFG) construction
-   ├─ Constant Folding (algorithm + examples)
-   ├─ Dead Code Elimination (liveness analysis)
-   ├─ Common Subexpression Elimination (expression tables)
-   ├─ Copy Propagation (value tracking)
-   ├─ Algebraic Simplification (mathematical identities)
-   ├─ Branch Elimination (constant conditions)
-   ├─ Pass Manager (fixed-point iteration)
-   ├─ Metrics and testing strategies
-   └─ Complete implementation guide with pseudocode
+# Generate output file
+python luna.py -o output.s --asm examples/fibonacci.luna
 
-═══════════════════════════════════════════════════════════════════════════════
-EXAMPLE PROGRAMS (4 files):
-═══════════════════════════════════════════════════════════════════════════════
+# Verbose mode (shows timing stats)
+python luna.py -v examples/fibonacci.luna
 
-1. hello_world.luna   - Basic "Hello, World!" program
-2. fibonacci.luna     - Recursive fibonacci with while loop
-3. factorial.luna     - Recursive factorial calculator
-4. fizzbuzz.luna      - Classic FizzBuzz with modulo and if/else
+# Use LLVM backend
+python luna.py --backend llvm examples/fibonacci.luna
 
-═══════════════════════════════════════════════════════════════════════════════
-IMPLEMENTATION ROADMAP (8-10 weeks - Production Compiler):
-═══════════════════════════════════════════════════════════════════════════════
+================================================================================
+TEST RESULTS
+================================================================================
 
-Week 1: Lexical Analysis
-  ✓ Define TokenType enum and Token class
-  ✓ Implement Lexer with character stream
-  ✓ Handle keywords, identifiers, literals, operators
-  ✓ Add error reporting with position tracking
-  ✓ Write comprehensive tests (100% coverage)
+Total: 390 tests passing
 
-Week 2: Syntax Analysis
-  ✓ Design AST node classes (expressions, statements, declarations)
-  ✓ Implement recursive descent parser
-  ✓ Handle operator precedence (precedence climbing)
-  ✓ Add error recovery and synchronization
-  ✓ Test all language constructs
-  ✓ Add AST pretty printer
+  Phase 1 - Lexer:        33 tests
+  Phase 2 - Parser:       63 tests
+  Phase 3 - Semantic:     65 tests
+  Phase 4 - IR:           58 tests
+  Phase 5 - Optimizations: 52 tests
+  Phase 6 - x86-64:       39 tests
+  Phase 7 - LLVM:         41 tests
+  Phase 8 - Integration:  39 tests
 
-Week 3: Semantic Analysis
-  ✓ Build symbol table with scope management
-  ✓ Implement type checker
-  ✓ Validate function signatures and calls
-  ✓ Check variable usage (undefined, redeclaration)
-  ✓ Add semantic error messages
-  ✓ Verify all code paths return
+Run tests:
+  python -m pytest                    # All tests
+  python -m pytest tests/test_lexer.py -v   # Specific phase
 
-Week 4: Intermediate Representation
-  ✓ Design three-address code (TAC) format
-  ✓ Generate IR from AST
-  ✓ Implement control flow translation (if, while)
-  ✓ Build Control Flow Graph (CFG)
-  ✓ Add basic block construction
-  ✓ Add IR pretty printer
+================================================================================
+IMPLEMENTATION HIGHLIGHTS
+================================================================================
 
-Week 5: IR Optimizations
-  ✓ Implement Constant Folding (2+3→5)
-  ✓ Implement Dead Code Elimination (DCE)
-  ✓ Implement Common Subexpression Elimination (CSE)
-  ✓ Implement Copy Propagation
-  ✓ Implement Algebraic Simplification (x*1→x, x+0→x)
-  ✓ Implement Branch Elimination (if true→goto)
-  ✓ Create Optimization Pass Manager (fixed-point iteration)
-  ✓ Add optimization metrics and statistics
+Type System:
+- Static typing with int, float, bool, string, void
+- Type checking for all operations
+- No implicit type conversions
 
-Week 6-7: Assembly Code Generation
-  ✓ Implement register allocation (linear scan)
-  ✓ Design stack frame layout
-  ✓ Generate x86-64 assembly code
-  ✓ Implement function prologue/epilogue
-  ✓ Map TAC instructions to assembly
-  ✓ Handle function calls (System V ABI)
-  ✓ Link with C standard library
-  ✓ Assemble and execute native binaries
+SSA-based IR:
+- Each variable assigned exactly once
+- Versioned variables (x_0, x_1, x_2)
+- Phi functions at control flow joins
 
-Week 7-8: LLVM IR Generation (Optional)
-  ✓ Install LLVM and llvmlite
-  ✓ Map Luna types to LLVM types
-  ✓ Generate LLVM IR for expressions
-  ✓ Generate LLVM IR for control flow
-  ✓ Generate LLVM IR for functions
-  ✓ Integrate LLVM optimization passes
-  ✓ Compile via LLVM toolchain (llc, clang)
-  ✓ Compare LLVM -O3 vs native codegen
+Optimizations:
+- Constant folding (2+3 -> 5)
+- Dead code elimination
+- Common subexpression elimination
+- Copy propagation
+- Algebraic simplification (x*1 -> x)
+- Control flow optimization
 
-Week 8-10: Polish & Production
-  ✓ Create professional CLI tool (luna.py)
-  ✓ Add all compiler flags (--tokens, --ast, --ir, --asm, --llvm, -O)
-  ✓ Improve error messages (colors, context, suggestions)
-  ✓ Complete documentation (LANGUAGE_SPEC, COMPILER_DESIGN, BUILD_PHASES, IR_OPTIMIZATIONS)
-  ✓ Achieve >90% test coverage
-  ✓ Create comprehensive test suite
-  ✓ Add 10+ example programs
-  ✓ Create benchmarks (compilation speed, execution speed, optimization impact)
-  ✓ Write TUTORIAL.md for Luna programming
-  ✓ Production-ready compiler!
+Code Generation:
+- x86-64 AT&T syntax (macOS compatible)
+- System V AMD64 ABI
+- LLVM IR via llvmlite with JIT execution
 
-═══════════════════════════════════════════════════════════════════════════════
-LEARNING OBJECTIVES (Production Compiler):
-═══════════════════════════════════════════════════════════════════════════════
+================================================================================
+DEPENDENCIES
+================================================================================
 
-By building this compiler, you'll learn:
+Required:
+  - Python 3.8+
+  - pytest (for tests)
+  - llvmlite (for LLVM backend)
 
-**Compiler Frontend:**
-1. Lexical Analysis: Regular expressions, pattern matching, tokenization
-2. Parsing: Context-free grammars, recursive descent, operator precedence
-3. Type Systems: Static typing, type checking, type inference basics
-4. Symbol Tables: Scope management, name resolution
-5. Semantic Analysis: AST traversal, validation, error detection
+Install:
+  pip install -r requirements.txt
 
-**Intermediate Representation:**
-6. Three-Address Code (TAC): IR design, instruction sets
-7. Control Flow Graphs (CFG): Basic blocks, dominators, data flow
-8. SSA Form: Static single assignment (in LLVM phase)
-
-**Optimizations:**
-9. Dataflow Analysis: Liveness analysis, reaching definitions
-10. Constant Folding: Compile-time evaluation
-11. Dead Code Elimination: Liveness-based removal
-12. Common Subexpression Elimination: Value numbering
-13. Copy Propagation: Dataflow-based substitution
-14. Algebraic Simplification: Mathematical identities, strength reduction
-15. Branch Elimination: Control flow simplification
-16. Pass Management: Fixed-point iteration, pass ordering
-
-**Compiler Backend:**
-17. Register Allocation: Linear scan, graph coloring concepts
-18. Stack Frame Layout: Calling conventions, ABI compliance
-19. x86-64 Assembly: Instruction selection, code emission
-20. System V ABI: Function calling, parameter passing
-21. Linking: Object files, symbol resolution, C library integration
-
-**LLVM (Optional):**
-22. LLVM IR: SSA-based IR, type system, instruction set
-23. LLVM API: Module building, IR generation, verification
-24. LLVM Optimizations: -O3 pipeline, inlining, vectorization
-25. LLVM Compilation: llc, clang integration, multiple targets
-
-**Software Engineering:**
-26. Software Architecture: Multi-phase design, separation of concerns
-27. Testing: TDD, unit tests, integration tests, correctness validation
-28. Error Handling: Meaningful messages, error recovery, diagnostics
-29. Performance: Benchmarking, profiling, optimization impact analysis
-30. Documentation: Technical writing, API docs, tutorials
-
-═══════════════════════════════════════════════════════════════════════════════
-GETTING STARTED:
-═══════════════════════════════════════════════════════════════════════════════
-
-1. Read the documentation:
-   cd compiler_project
-   cat docs/LANGUAGE_SPEC.md       # Understand Luna syntax
-   cat docs/COMPILER_DESIGN.md     # Understand architecture
-   cat docs/BUILD_PHASES.md        # See implementation plan
-
-2. Install dependencies:
-   pip install -r requirements.txt
-
-3. Start with Phase 1 (Lexer):
-   # Read docs/BUILD_PHASES.md Phase 1 section
-   # Create src/lexer/token.py
-   # Create src/lexer/lexer.py
-   # Write tests/test_lexer.py
-   # Implement tokenization
-   # Test with: python -m pytest tests/test_lexer.py
-
-4. Continue through phases 2-6
-
-═══════════════════════════════════════════════════════════════════════════════
-RESOURCES:
-═══════════════════════════════════════════════════════════════════════════════
-
-Books:
-- "Crafting Interpreters" by Robert Nystrom (highly recommended!)
-- "Engineering a Compiler" by Cooper & Torczon
-- "Modern Compiler Implementation" by Andrew Appel
-- "Compilers: Principles, Techniques, and Tools" (Dragon Book)
-
-Online:
-- Read the docs/ folder (comprehensive guide)
-- Follow BUILD_PHASES.md step-by-step
-- Test incrementally as you build
-
-═══════════════════════════════════════════════════════════════════════════════
-GIT STATUS:
-═══════════════════════════════════════════════════════════════════════════════
-
-Repository: /Users/arinta/Documents/Arinta-Work/Code Claude/compiler_project
-Branch: main
-Commit: 7451aca - Initial commit: Luna compiler project setup
-Files: 18 files, 2,110 lines
-Status: Clean (ready to start implementing)
-
-═══════════════════════════════════════════════════════════════════════════════
-NEXT STEPS:
-═══════════════════════════════════════════════════════════════════════════════
-
-1. Review docs/LANGUAGE_SPEC.md to understand Luna syntax
-2. Review docs/COMPILER_DESIGN.md to understand architecture
-3. Open docs/BUILD_PHASES.md and start Phase 1: Lexical Analysis
-4. Create src/lexer/token.py - Define TokenType enum and Token class
-5. Create tests/test_lexer.py - Write tests first (TDD)
-6. Create src/lexer/lexer.py - Implement tokenization
-7. Run tests and iterate
-
-═══════════════════════════════════════════════════════════════════════════════
-
-🎓 This is a comprehensive compiler construction learning project!
-🚀 Start building your compiler and learn how programming languages work!
-📚 All documentation is ready to guide you through implementation!
-
-═══════════════════════════════════════════════════════════════════════════════
+================================================================================

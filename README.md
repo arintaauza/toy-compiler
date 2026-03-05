@@ -173,7 +173,6 @@ Test breakdown:
 - [LANGUAGE_SPEC.md](docs/LANGUAGE_SPEC.md) - Toy language specification
 - [COMPILER_DESIGN.md](docs/COMPILER_DESIGN.md) - Architecture overview
 - [COMPILER_INTERNALS.md](docs/COMPILER_INTERNALS.md) - Type system, IR, optimizations
-- [BUILD_PHASES.md](docs/BUILD_PHASES.md) - Implementation roadmap
 
 ## Requirements
 
